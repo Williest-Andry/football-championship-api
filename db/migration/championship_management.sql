@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS championship_management ;
+DROP DATABASE IF EXISTS championship_management;
 CREATE DATABASE championship_management;
 \c championship_management
 
@@ -9,10 +9,11 @@ CREATE TABLE season(
 );
 
 CREATE TYPE league_country AS ENUM ('England', 'Spain', 'Germany', 'Italy', 'France');
+CREATE TYPE league_name AS ENUM('PREMIER_LEAGUE', 'LA_LIGA', 'BUNDESLIGA', 'SERIA_A', 'LIGUE_1');
 CREATE TABLE league(
     league_id UUID PRIMARY KEY,
-    league_name VARCHAR NOT NULL,
-    country league_country NOT NULL
+    league_name league_country NOT NULL,
+    country league_name NOT NULL
 );
 
 CREATE TABLE league_season(
