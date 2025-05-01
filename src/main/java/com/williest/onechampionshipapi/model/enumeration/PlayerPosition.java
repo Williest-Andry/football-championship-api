@@ -1,7 +1,7 @@
 package com.williest.onechampionshipapi.model.enumeration;
 
 public enum PlayerPosition {
-    FORWARD,
+    STRIKER,
     MIDFIELDER,
     DEFENDER,
     GOALKEEPER

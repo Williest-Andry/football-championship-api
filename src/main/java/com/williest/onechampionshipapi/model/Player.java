@@ -16,4 +16,8 @@ public class Player {
     private String nationality;
     private LocalDate birthday;
     private PlayerPosition playerPosition;
+
+    public int getAge(){
+        return LocalDate.now().getYear() - birthday.getYear();
+    }
 }

@@ -53,7 +53,7 @@ CREATE TABLE match(
     away_team UUID REFERENCES club(club_id)
 );
 
-CREATE TYPE player_position_in_field AS ENUM ('FORWARD', 'MIDFIELDER', 'DEFENDER', 'GOALKEEPER');
+CREATE TYPE player_position_in_field AS ENUM ('STRIKER', 'MIDFIELDER', 'DEFENDER', 'GOALKEEPER');
 CREATE TABLE player(
     player_id UUID PRIMARY KEY,
     club_id UUID REFERENCES club(club_id),
