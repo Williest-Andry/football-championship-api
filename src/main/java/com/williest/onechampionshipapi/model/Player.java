@@ -5,11 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class Player {
-    private String id;
+    private final UUID id = UUID.randomUUID();
     private String name;
     private int number;
     private String nationality;

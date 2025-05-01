@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class League {
-    private String id;
+    private final UUID id = UUID.randomUUID();
     private LeagueName name;
     private Country country;
     private List<Club> clubs;
-    private Club champion;
     private List<Match> allMatches;
     private Season season;
     private List<Ranking> generalRanking;

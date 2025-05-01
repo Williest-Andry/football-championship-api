@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class Club {
-    private String id;
+    private final UUID id = UUID.randomUUID();
     private String name;
     private LocalDate creationYear;
     private String acronym;
@@ -18,4 +19,5 @@ public class Club {
     private List<Player> players;
     private Coach coach;
     private ClubStatistic clubStatistic;
+    private Ranking ranking;
 }
