@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @Configuration
 @NoArgsConstructor
-public class DataSource {
+public class DataSourceDB {
     private final String url = System.getenv("DB_URL");
     private final String user = System.getenv("DB_USERNAME");
     private final String password = System.getenv("DB_PASSWORD");
