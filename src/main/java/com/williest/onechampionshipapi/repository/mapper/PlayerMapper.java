@@ -25,7 +25,7 @@ public class PlayerMapper implements Function<ResultSet, Player> {
             Player player = Player.builder().id((UUID) rs.getObject("player_id")).build();
             player.setName(rs.getString("player_name"));
             player.setNumber(rs.getInt("player_number"));
-            player.setBirthday(rs.getDate("player_birthday").toLocalDate());
+            player.setBirth_year(rs.getString("player_birth_year"));
             player.setPlayerPosition(PlayerPosition.valueOf(rs.getString("player_position")));
             player.setNationality(rs.getString("player_nationality"));
 

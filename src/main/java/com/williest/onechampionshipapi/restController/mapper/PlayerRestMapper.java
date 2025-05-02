@@ -1,6 +1,7 @@
 package com.williest.onechampionshipapi.restController.mapper;
 
 import com.williest.onechampionshipapi.model.Player;
+import com.williest.onechampionshipapi.restController.createRestEntity.CreatePlayer;
 import com.williest.onechampionshipapi.restController.restEntity.ClubRest;
 import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,20 @@ public class PlayerRestMapper implements Function<Player, PlayerRest> {
                 player.getName(),
                 player.getNumber(),
                 player.getNationality(),
-                player.getBirthday(),
+                player.getBirth_year(),
                 player.getPlayerPosition(),
                 clubRest
         );
+    }
+
+    public Player toModel(CreatePlayer createPlayer) {
+        return Player.builder()
+                .id(createPlayer.getId())
+                .name(createPlayer.getName())
+                .number(createPlayer.getNumber())
+                .nationality(createPlayer.getNationality())
+                .birth_year(createPlayer.getBirthYear())
+                .playerPosition(createPlayer.getPlayerPosition())
+                .club(null).build();
     }
 }

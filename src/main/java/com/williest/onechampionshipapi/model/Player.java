@@ -15,11 +15,11 @@ public class Player {
     private String name;
     private int number;
     private String nationality;
-    private LocalDate birthday;
+    private String birth_year;
     private PlayerPosition playerPosition;
     private Club club;
 
     public int getAge(){
-        return LocalDate.now().getYear() - birthday.getYear();
+        return LocalDate.now().getYear() - Integer.parseInt(birth_year);
     }
 }

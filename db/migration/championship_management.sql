@@ -48,7 +48,7 @@ CREATE TABLE club(
 CREATE TABLE match(
     match_id UUID PRIMARY KEY,
     league_id UUID REFERENCES league(league_id) NOT NULL,
-    match_date TIMESTAMP NOT NULL,
+    match_date TIMESTAMP,
     home_team UUID REFERENCES club(club_id) NOT NULL,
     away_team UUID REFERENCES club(club_id) NOT NULL
 );
@@ -60,6 +60,6 @@ CREATE TABLE player(
     player_name VARCHAR NOT NULL,
     player_number INT NOT NULL,
     player_nationality VARCHAR NOT NULL,
-    player_birthday DATE NOT NULL,
+    player_birth_year VARCHAR(4) NOT NULL,
     player_position player_position_in_field NOT NULL
 );

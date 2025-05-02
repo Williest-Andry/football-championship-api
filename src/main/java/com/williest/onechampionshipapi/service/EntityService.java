@@ -11,5 +11,7 @@ public interface EntityService<T>{
 
     T save(T entity);
 
+    List<T> saveAll(List<T> entities);
+
     T delete(T entity);
 }

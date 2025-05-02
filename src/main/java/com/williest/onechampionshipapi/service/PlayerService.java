@@ -41,6 +41,11 @@ public class PlayerService implements EntityService<Player> {
     }
 
     @Override
+    public List<Player> saveAll(List<Player> entities) {
+        return entities.stream().map(this::save).toList();
+    }
+
+    @Override
     public Player delete(Player entity) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

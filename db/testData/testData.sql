@@ -37,22 +37,22 @@ INSERT INTO club (
 
 INSERT INTO player (
     player_id, club_id, player_name, player_number,
-    player_nationality, player_birthday, player_position
+    player_nationality, player_birth_year, player_position
 ) VALUES
 -- Robert Lewandowski
-('d8a1b69c-2499-4fd2-8d0c-28cfbd1f5ed0', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Robert Lewandowski', 9, 'Pologne', '1988-08-21', 'STRIKER'),
+('d8a1b69c-2499-4fd2-8d0c-28cfbd1f5ed0', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Robert Lewandowski', 9, 'Pologne', '1988', 'STRIKER'),
 
 -- Pedri
-('e3c8d9d1-f2ac-4a6e-90db-0a561827b389', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Pedri González', 8, 'Espagne', '2002-11-25', 'MIDFIELDER'),
+('e3c8d9d1-f2ac-4a6e-90db-0a561827b389', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Pedri González', 8, 'Espagne', '2002', 'MIDFIELDER'),
 
 -- Gavi
-('0f87f6e2-ae38-4983-9252-cd8b589f2a5b', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Gavi', 6, 'Espagne', '2004-08-05', 'MIDFIELDER'),
+('0f87f6e2-ae38-4983-9252-cd8b589f2a5b', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Gavi', 6, 'Espagne', '2004', 'MIDFIELDER'),
 
 -- Frenkie de Jong
-('c59de13d-e70b-44d0-8d93-45e51d9c5fa3', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Frenkie de Jong', 21, 'Pays-Bas', '1997-05-12', 'MIDFIELDER'),
+('c59de13d-e70b-44d0-8d93-45e51d9c5fa3', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Frenkie de Jong', 21, 'Pays-Bas', '1997', 'MIDFIELDER'),
 
 -- Ter Stegen
-('a7d436e8-0af5-4f11-a1f6-0e6b0e4ff1aa', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Marc-André ter Stegen', 1, 'Allemagne', '1992-04-30', 'GOALKEEPER');
+('a7d436e8-0af5-4f11-a1f6-0e6b0e4ff1aa', 'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', 'Marc-André ter Stegen', 1, 'Allemagne', '1992', 'GOALKEEPER');
 
 
 INSERT INTO coach (coach_id, coach_name, coach_nationality) VALUES
@@ -101,7 +101,7 @@ INSERT INTO player (
     player_name,
     player_number,
     player_nationality,
-    player_birthday,
+    player_birth_year,
     player_position
 ) VALUES
 -- Vinicius Junior
@@ -110,7 +110,7 @@ INSERT INTO player (
  'Vinicius Junior',
  7,
  'Bresil',
- '2000-07-12',
+ '2000',
  'STRIKER'),
 
 -- Jude Bellingham
@@ -119,7 +119,7 @@ INSERT INTO player (
  'Jude Bellingham',
  5,
  'Angleterre',
- '2003-06-29',
+ '2003',
  'MIDFIELDER'),
 
 -- Luka Modric
@@ -128,7 +128,7 @@ INSERT INTO player (
  'Luka Modric',
  10,
  'Croatie',
- '1985-09-09',
+ '1985',
  'MIDFIELDER'),
 
 -- Antonio Rudiger
@@ -137,7 +137,7 @@ INSERT INTO player (
  'Antonio Rudiger',
  22,
  'Allemagne',
- '1993-03-03',
+ '1993',
  'DEFENDER'),
 
 -- Thibaut Courtois
@@ -146,5 +146,5 @@ INSERT INTO player (
  'Thibaut Courtois',
  1,
  'Belgique',
- '1992-05-11',
+ '1992',
  'GOALKEEPER');

@@ -1,6 +1,5 @@
-package com.williest.onechampionshipapi.restController.restEntity;
+package com.williest.onechampionshipapi.restController.createRestEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.williest.onechampionshipapi.model.enumeration.PlayerPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,17 +9,15 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class PlayerRest {
+public class CreatePlayer {
     private final UUID id;
     private String name;
     private int number;
     private String nationality;
-    @JsonIgnore
-    private String birth_year;
+    private int age;
     private PlayerPosition playerPosition;
-    private ClubRest club;
 
-    public int getAge(){
-        return LocalDate.now().getYear() - Integer.parseInt(birth_year);
+    public String getBirthYear(){
+        return String.valueOf(LocalDate.now().getYear() - age);
     }
 }
