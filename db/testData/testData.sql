@@ -2,7 +2,7 @@ INSERT INTO season (season_id, begin_date, end_date) VALUES
     ('e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b', '2024-09-01', '2025-06-30');
 
 INSERT INTO league (league_id, league_name, country) VALUES
-    ('d4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 'Spain', 'LA_LIGA');
+    ('d4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 'LA_LIGA', 'Spain');
 
 INSERT INTO league_season (season_id, league_id) VALUES
     ('e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b', 'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b');
@@ -30,7 +30,7 @@ INSERT INTO club (
              'a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
              'c1d2e3f4-a5b6-c7d8-e9f0-1a2b3c4d5e6f',
              'FC Barcelona',
-             '1899-11-29',
+             '1899',
              'FCB',
              'Lluís Companys'
          );
@@ -76,7 +76,7 @@ INSERT INTO club (
              'bbccddee-1234-5678-90ab-cdef12345678',
              '99887766-5544-3322-1100-aabbccddeeff',
              'Real Madrid',
-             '1902-03-06',
+             '1902',
              'RMA',
              'Santiago Bernabéu'
          );

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 public class CreatePlayer {
-    private final UUID id;
+    private final String id;
     private String name;
     private int number;
     private String nationality;
@@ -19,5 +19,10 @@ public class CreatePlayer {
 
     public String getBirthYear(){
         return String.valueOf(LocalDate.now().getYear() - age);
+    }
+
+    public boolean isValid(){
+        return id != null && name != null && !name.isEmpty() && name.length() > 1
+                && number > 0 && nationality != null && age > 0 && playerPosition != null;
     }
 }

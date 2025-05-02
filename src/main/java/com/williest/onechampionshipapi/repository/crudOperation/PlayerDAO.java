@@ -51,22 +51,76 @@ public class PlayerDAO implements EntityDAO<Player> {
 
     @Override
     public Player findById(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Player foundPlayer = null;
+
+        try(Connection dbConnection = dataSourceDB.getConnection()){
+            sqlRequest = "SELECT * FROM player WHERE player_id = ?";
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);
+            select.setObject(1, id);
+            ResultSet rs = select.executeQuery();
+            if(rs.next()){
+                foundPlayer = this.playerMapper.applyWithoutClub(rs);
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN FIND PLAYER BY ID : " + e.getMessage());
+        }
+
+        return foundPlayer;
     }
 
     @Override
-    public Player save(Player entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Player save(Player player) {
+        if(this.findById(player.getId()) != null){
+            return this.update(player);
+        }
+
+        UUID savedPlayerId = null;
+
+        try(Connection dbConnection = dataSourceDB.getConnection()){
+            sqlRequest = "INSERT INTO player VALUES (?,?,?,?,?,?,?::player_position_in_field) RETURNING player_id;";
+            PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);
+            insert.setObject(1, player.getId());
+            insert.setObject(2, null);
+            insert.setString(3, player.getName());
+            insert.setInt(4, player.getNumber());
+            insert.setString(5, player.getNationality());
+            insert.setString(6, player.getBirth_year());
+            insert.setString(7, player.getPlayerPosition().toString());
+            ResultSet rs = insert.executeQuery();
+            if(rs.next()){
+                savedPlayerId = (UUID) rs.getObject("player_id");
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN SAVE PLAYER : " + e.getMessage());
+        }
+
+        return this.findById(savedPlayerId);
     }
 
     @Override
-    public List<Player> saveAll(List<Player> entities) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Player> saveAll(List<Player> players) {
+        return players.stream().map(this::save).toList();
     }
 
     @Override
-    public Player update(Player entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Player update(Player player) {
+        try(Connection dbConnection = dataSourceDB.getConnection()){
+            sqlRequest = "UPDATE player SET club_id = ?, player_name = ?, player_number = ?, player_nationality = ?," +
+                    " player_birth_year = ?, player_position = ?::player_position_in_field WHERE player_id = ?";
+            PreparedStatement update = dbConnection.prepareStatement(sqlRequest);
+            update.setObject(1, player.getClub() != null? player.getClub().getId() : null);
+            update.setString(2, player.getName());
+            update.setInt(3, player.getNumber());
+            update.setString(4, player.getNationality());
+            update.setString(5, player.getBirth_year());
+            update.setString(6, player.getPlayerPosition().toString());
+            update.setObject(7, player.getId());
+            update.executeUpdate();
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN UPDATE PLAYER : " + e.getMessage());
+        }
+
+        return this.findById(player.getId());
     }
 
     @Override

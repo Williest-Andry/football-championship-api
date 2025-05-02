@@ -4,6 +4,7 @@ import com.williest.onechampionshipapi.model.Player;
 import com.williest.onechampionshipapi.restController.createRestEntity.CreatePlayer;
 import com.williest.onechampionshipapi.restController.mapper.PlayerRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
+import com.williest.onechampionshipapi.restController.restEntity.SavedPlayerRest;
 import com.williest.onechampionshipapi.service.PlayerService;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import com.williest.onechampionshipapi.service.exception.NotFoundException;
@@ -40,9 +41,12 @@ public class PlayerController {
     @PutMapping("/players")
     public ResponseEntity<Object> savePlayers(@RequestBody List<CreatePlayer> playersToSave){
         try{
+            if(playersToSave.isEmpty()){
+                throw new ClientException("The player list must not be empty");
+            }
             List<Player> players = playersToSave.stream().map(this.playerRestMapper::toModel).toList();
             List<Player> savedPlayers = this.playerService.saveAll(players);
-            List<PlayerRest> savedPlayersRest = savedPlayers.stream().map(this.playerRestMapper::apply).toList();
+            List<SavedPlayerRest> savedPlayersRest = savedPlayers.stream().map(this.playerRestMapper::applyWithoutClub).toList();
             return ResponseEntity.ok().body(savedPlayersRest);
         } catch(ServerException e){
             return ResponseEntity.internalServerError().body(e.getMessage());

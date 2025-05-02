@@ -12,8 +12,8 @@ CREATE TYPE league_country AS ENUM ('England', 'Spain', 'Germany', 'Italy', 'Fra
 CREATE TYPE league_name AS ENUM('PREMIER_LEAGUE', 'LA_LIGA', 'BUNDESLIGA', 'SERIA_A', 'LIGUE_1');
 CREATE TABLE league(
     league_id UUID PRIMARY KEY,
-    league_name league_country NOT NULL,
-    country league_name NOT NULL
+    league_name league_name NOT NULL,
+    country league_country NOT NULL
 );
 
 CREATE TABLE league_season(
@@ -40,7 +40,7 @@ CREATE TABLE club(
     coach_id UUID REFERENCES coach(coach_id) NOT NULL,
     ranking_id UUID REFERENCES ranking(ranking_id) NOT NULL,
     club_name VARCHAR UNIQUE NOT NULL,
-    creation_year DATE NOT NULL,
+    creation_year VARCHAR(4) NOT NULL,
     acronym VARCHAR(3) NOT NULL,
     stadium_name VARCHAR NOT NULL
 );
@@ -56,7 +56,7 @@ CREATE TABLE match(
 CREATE TYPE player_position_in_field AS ENUM ('STRIKER', 'MIDFIELDER', 'DEFENDER', 'GOALKEEPER');
 CREATE TABLE player(
     player_id UUID PRIMARY KEY,
-    club_id UUID REFERENCES club(club_id) NOT NULL,
+    club_id UUID REFERENCES club(club_id),
     player_name VARCHAR NOT NULL,
     player_number INT NOT NULL,
     player_nationality VARCHAR NOT NULL,

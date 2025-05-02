@@ -19,9 +19,8 @@ import java.util.function.Function;
 public class PlayerMapper implements Function<ResultSet, Player> {
     private final CoachDAO coachDAO;
 
-    @Override
-    public Player apply(ResultSet rs) {
-        try {
+    public Player applyWithoutClub(ResultSet rs){
+        try{
             Player player = Player.builder().id((UUID) rs.getObject("player_id")).build();
             player.setName(rs.getString("player_name"));
             player.setNumber(rs.getInt("player_number"));
@@ -29,10 +28,21 @@ public class PlayerMapper implements Function<ResultSet, Player> {
             player.setPlayerPosition(PlayerPosition.valueOf(rs.getString("player_position")));
             player.setNationality(rs.getString("player_nationality"));
 
+            return player;
+        } catch (SQLException e){
+            throw new ServerException("ERROR IN PLAYER MAPPER ONLY : " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Player apply(ResultSet rs) {
+        try {
+            Player player = this.applyWithoutClub(rs);
+
             Club club = Club.builder().id((UUID) (rs.getObject("club_id"))).build();
             club.setName(rs.getString("club_name"));
             club.setAcronym(rs.getString("acronym"));
-            club.setCreationYear(rs.getDate("creation_year").toLocalDate());
+            club.setCreationYear(rs.getString("creation_year"));
             club.setStadiumName(rs.getString("stadium_name"));
 
             UUID coachId = (UUID) rs.getObject("coach_id");
@@ -45,4 +55,5 @@ public class PlayerMapper implements Function<ResultSet, Player> {
             throw new ServerException("ERROR IN PLAYER MAPPER : " + e.getMessage());
         }
     }
+
 }

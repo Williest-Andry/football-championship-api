@@ -43,21 +43,21 @@ public class CoachDAO implements EntityDAO<Coach>{
 
     @Override
     public Coach save(Coach entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public List<Coach> saveAll(List<Coach> entities) {
-        return List.of();
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Coach update(Coach entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Coach deleteById(UUID id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

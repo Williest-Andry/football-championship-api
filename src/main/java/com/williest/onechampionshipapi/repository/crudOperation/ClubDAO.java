@@ -5,6 +5,7 @@ import com.williest.onechampionshipapi.repository.DataSourceDB;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,26 +17,26 @@ public class ClubDAO implements EntityDAO<Club>{
 
     @Override
     public Club findById(UUID id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Club save(Club entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public List<Club> saveAll(List<Club> entities) {
-        return List.of();
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Club update(Club entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Club deleteById(UUID id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

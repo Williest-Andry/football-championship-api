@@ -16,6 +16,7 @@ public class ClubRestMapper implements Function<Club, ClubRest> {
     @Override
     public ClubRest apply(Club club) {
         CoachRest coachRest = this.coachRestMapper.apply(club.getCoach());
+
         return new ClubRest(
                 club.getId(),
                 club.getName(),

@@ -1,26 +1,19 @@
 package com.williest.onechampionshipapi.restController.restEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.williest.onechampionshipapi.model.enumeration.PlayerPosition;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
+@Setter
 @Getter
-@AllArgsConstructor
-public class PlayerRest {
-    private final UUID id;
-    private String name;
-    private int number;
-    private String nationality;
-    @JsonIgnore
-    private String birth_year;
-    private PlayerPosition playerPosition;
+public class PlayerRest extends SavedPlayerRest{
     private ClubRest club;
 
-    public int getAge(){
-        return LocalDate.now().getYear() - Integer.parseInt(birth_year);
+    public PlayerRest(UUID id, String name, int number, String nationality, String birth_year,
+                      PlayerPosition playerPosition, ClubRest club) {
+        super(id, name, number, nationality, birth_year, playerPosition);
+        this.club = club;
     }
 }
