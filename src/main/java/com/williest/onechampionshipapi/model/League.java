@@ -2,15 +2,16 @@ package com.williest.onechampionshipapi.model;
 
 import com.williest.onechampionshipapi.model.enumeration.Country;
 import com.williest.onechampionshipapi.model.enumeration.LeagueName;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class League {
+    @Builder.Default
     private final UUID id = UUID.randomUUID();
     private LeagueName name;
     private Country country;

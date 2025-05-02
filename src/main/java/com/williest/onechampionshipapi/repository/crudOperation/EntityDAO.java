@@ -9,8 +9,6 @@ import java.util.UUID;
 public interface EntityDAO<T>{
     T findById(UUID id);
 
-    List<T> findAll();
-
     T save(T entity);
 
     List<T> saveAll(List<T> entities);

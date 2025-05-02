@@ -1,13 +1,14 @@
 package com.williest.onechampionshipapi.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class Ranking {
+    @Builder.Default
     private final UUID id = UUID.randomUUID();
     private int rank;
     private int points;

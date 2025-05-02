@@ -1,14 +1,15 @@
 package com.williest.onechampionshipapi.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class Match {
+    @Builder.Default
     private final UUID id = UUID.randomUUID();
     private LocalDateTime matchDate;
     private Club homeTeam;

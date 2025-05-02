@@ -1,6 +1,8 @@
 package com.williest.onechampionshipapi.restController;
 
 import com.williest.onechampionshipapi.model.Player;
+import com.williest.onechampionshipapi.restController.mapper.PlayerRestMapper;
+import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
 import com.williest.onechampionshipapi.service.PlayerService;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import com.williest.onechampionshipapi.service.exception.NotFoundException;
@@ -18,15 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlayerController {
     private final PlayerService playerService;
+    private final PlayerRestMapper playerRestMapper;
 
     @GetMapping("/players")
     public ResponseEntity<Object> getPlayers(@RequestParam(required = false) String name,
-                                             @RequestParam(required = false) int ageMinimum,
-                                             @RequestParam(required = false) int ageMaximum,
+                                             @RequestParam(required = false) Integer ageMinimum,
+                                             @RequestParam(required = false) Integer ageMaximum,
                                              @RequestParam(required = false) String clubName) {
         try{
             List<Player> foundPlayers = this.playerService.getAllPlayers(name, ageMinimum, ageMaximum, clubName);
-            return ResponseEntity.ok().body(foundPlayers);
+            List<PlayerRest> foundPlayersRest = foundPlayers.stream().map(this.playerRestMapper::apply).toList();
+            return ResponseEntity.ok().body(foundPlayersRest);
         } catch(ServerException e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch(ClientException e) {
