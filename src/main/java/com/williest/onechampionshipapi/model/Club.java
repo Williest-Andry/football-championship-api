@@ -18,6 +18,6 @@ public class Club {
     private League league;
     private List<Player> players;
     private Coach coach;
-    private ClubStatistic clubStatistic;
+    private List<ClubStatistic> clubStatistics;
     private Ranking ranking;
 }

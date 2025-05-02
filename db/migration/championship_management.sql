@@ -63,3 +63,23 @@ CREATE TABLE player(
     player_birth_year VARCHAR(4) NOT NULL,
     player_position player_position_in_field NOT NULL
 );
+
+CREATE TABLE player_statistic(
+    player_statistic_id UUID PRIMARY KEY,
+    player_id UUID REFERENCES player(player_id) NOT NULL,
+    season_id UUID REFERENCES season(season_id) NOT NULL,
+    match_id UUID REFERENCES match(match_id) NOT NULL,
+    scored_goals INT NOT NULL,
+    playing_time_minute DECIMAL NOT NULL
+);
+
+CREATE TABLE club_statistic(
+    club_statistic_id UUID PRIMARY KEY,
+    club_id UUID REFERENCES club(club_id),
+    season_id UUID REFERENCES season(season_id) NOT NULL,
+    match_id UUID REFERENCES match(match_id) NOT NULL,
+    score_goals INT NOT NULL,
+    conceded_goals INT NOT NULL,
+    difference_goals INT NOT NULL,
+    clean_sheet_number INT NOT NULL
+);

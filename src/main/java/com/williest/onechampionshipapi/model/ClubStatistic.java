@@ -2,17 +2,14 @@ package com.williest.onechampionshipapi.model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.UUID;
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-public class ClubStatistic {
-    @Builder.Default
-    private final UUID id = UUID.randomUUID();
-    private int totalRankingPoints;
-    private int totalGoals;
-    private int totalConcededGoals;
-    private int goalDifference;
-    private int totalCleanSheets;
+public class ClubStatistic extends EntityStatistic{
+    private int rankingPoints;
+    private int concededGoals;
+    private int differenceGoals;
+    private int cleanSheetNumber;
 }

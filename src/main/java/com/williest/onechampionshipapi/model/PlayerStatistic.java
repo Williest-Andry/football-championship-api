@@ -2,13 +2,11 @@ package com.williest.onechampionshipapi.model;
 
 import lombok.Builder;
 import lombok.Data;
-import java.util.UUID;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-public class PlayerStatistic {
-    @Builder.Default
-    private final UUID id = UUID.randomUUID();
-    private int totalGoalsScored;
-    private double totalPlayingTime;
+public class PlayerStatistic extends EntityStatistic{
+    private double playingTime;
 }

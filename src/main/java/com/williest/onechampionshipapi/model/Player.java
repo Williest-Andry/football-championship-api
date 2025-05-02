@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -18,6 +19,7 @@ public class Player {
     private String birth_year;
     private PlayerPosition playerPosition;
     private Club club;
+    private List<PlayerStatistic> playerStatistics;
 
     public int getAge(){
         return LocalDate.now().getYear() - Integer.parseInt(birth_year);
