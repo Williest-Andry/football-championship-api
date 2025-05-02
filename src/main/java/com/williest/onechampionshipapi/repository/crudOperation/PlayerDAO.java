@@ -24,15 +24,15 @@ public class PlayerDAO implements EntityDAO<Player> {
 
     public List<Player> findAll(String playerName, String clubName) {
         List<Player> players = new ArrayList<>();
-        sqlRequest = "SELECT * FROM \"player\" INNER JOIN club ON player.club_id = club.club_id ";
-        if(playerName != null){
+        sqlRequest = "SELECT * FROM player INNER JOIN club ON player.club_id = club.club_id ";
+        if(playerName != null && clubName == null){
             sqlRequest += " WHERE player_name ILIKE '%" + playerName + "%'";
         }
-        if(clubName != null){
-            sqlRequest += " WHERE club_id ILIKE '%" + clubName + "%'";
+        if(clubName != null && playerName == null){
+            sqlRequest += " WHERE club_name ILIKE '%" + clubName + "%'";
         }
         if(playerName != null && clubName != null){
-            sqlRequest += " WHERE player_name ILIKE '%" + playerName + "%' AND club_id ILIKE '%" + clubName + "%'";
+            sqlRequest += " WHERE player_name ILIKE '%" + playerName + "%' AND club_name ILIKE '%" + clubName + "%'";
         }
 
         try(Connection dbConnection = dataSourceDB.getConnection()){

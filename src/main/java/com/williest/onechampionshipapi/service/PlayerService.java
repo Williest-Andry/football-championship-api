@@ -18,15 +18,15 @@ public class PlayerService implements EntityService<Player> {
         if(playerName != null && playerName.isEmpty()) {
             throw new ClientException("Player name can't be empty");
         }
+        if(clubName != null && clubName.isEmpty()) {
+            throw new ClientException("Club name can't be empty");
+        }
 //        if(ageMinimum < 0 || ageMaximum < 0) {
 //            throw new ClientException("Age minimum or maximum must be greater than 0");
 //        }
 //        if(ageMinimum > ageMaximum) {
 //            throw new ClientException("Age maximum must be greater than age minimum");
 //        }
-        if(clubName != null && clubName.isEmpty()) {
-            throw new ClientException("Club name can't be empty");
-        }
         return this.playerDAO.findAll(playerName, clubName);
     }
 

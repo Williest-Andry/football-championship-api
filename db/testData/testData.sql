@@ -104,12 +104,12 @@ INSERT INTO player (
     player_birthday,
     player_position
 ) VALUES
--- Vinícius Júnior
+-- Vinicius Junior
 ('10000000-aaaa-bbbb-cccc-000000000001',
  'fedcba98-7654-3210-bcde-9876543210ff',
- 'Vinícius Júnior',
+ 'Vinicius Junior',
  7,
- 'Brésil',
+ 'Bresil',
  '2000-07-12',
  'STRIKER'),
 
@@ -122,19 +122,19 @@ INSERT INTO player (
  '2003-06-29',
  'MIDFIELDER'),
 
--- Luka Modrić
+-- Luka Modric
 ('10000000-aaaa-bbbb-cccc-000000000003',
  'fedcba98-7654-3210-bcde-9876543210ff',
- 'Luka Modrić',
+ 'Luka Modric',
  10,
  'Croatie',
  '1985-09-09',
  'MIDFIELDER'),
 
--- Antonio Rüdiger
+-- Antonio Rudiger
 ('10000000-aaaa-bbbb-cccc-000000000004',
  'fedcba98-7654-3210-bcde-9876543210ff',
- 'Antonio Rüdiger',
+ 'Antonio Rudiger',
  22,
  'Allemagne',
  '1993-03-03',
@@ -148,4 +148,3 @@ INSERT INTO player (
  'Belgique',
  '1992-05-11',
  'GOALKEEPER');
-
