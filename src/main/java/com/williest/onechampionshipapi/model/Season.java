@@ -1,5 +1,6 @@
 package com.williest.onechampionshipapi.model;
 
+import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,8 +13,16 @@ import java.util.UUID;
 public class Season {
     @Builder.Default
     private final UUID id = UUID.randomUUID();
-    private LocalDate beginDate;
-    private LocalDate endDate;
+    private int year;
+    private String alias;
+    private SeasonStatus status;
     private List<ClubStatistic> clubStatistics;
     private List<PlayerStatistic> playerStatistics;
+
+    public String getAlias(){
+        if(alias.length() != 10){
+            return "S"+String.valueOf(year)+"-"+String.valueOf(year + 1);
+        }
+        return alias;
+    }
 }

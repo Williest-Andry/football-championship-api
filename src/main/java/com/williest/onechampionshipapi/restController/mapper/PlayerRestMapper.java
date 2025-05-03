@@ -5,6 +5,7 @@ import com.williest.onechampionshipapi.restController.createRestEntity.CreatePla
 import com.williest.onechampionshipapi.restController.restEntity.ClubRest;
 import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
 import com.williest.onechampionshipapi.restController.restEntity.SavedPlayerRest;
+import com.williest.onechampionshipapi.service.IdVerification;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -51,12 +52,7 @@ public class PlayerRestMapper implements Function<Player, PlayerRest> {
             throw new ClientException("The player format is incorrect");
         }
 
-        UUID createPlayerId;
-        try{
-            createPlayerId = UUID.fromString(createPlayer.getId());
-        } catch (IllegalArgumentException e){
-            createPlayerId = null;
-        }
+        UUID createPlayerId = IdVerification.validUUID(createPlayer.getId());
 
         return Player.builder()
                 .id(createPlayerId)

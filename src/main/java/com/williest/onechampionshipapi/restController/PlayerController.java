@@ -1,6 +1,7 @@
 package com.williest.onechampionshipapi.restController;
 
 import com.williest.onechampionshipapi.model.Player;
+import com.williest.onechampionshipapi.model.PlayerStatistic;
 import com.williest.onechampionshipapi.restController.createRestEntity.CreatePlayer;
 import com.williest.onechampionshipapi.restController.mapper.PlayerRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
@@ -57,4 +58,17 @@ public class PlayerController {
         }
     }
 
+    @GetMapping("/players/{id}/statistics/{seasonYear}")
+    public ResponseEntity<Object> getPlayerStatistics(@PathVariable String id, @PathVariable int seasonYear){
+        try{
+            PlayerStatistic foundPlayerStatistic = this.playerService.getPlayerStatistics(id, seasonYear);
+            return ResponseEntity.ok().body(foundPlayerStatistic);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

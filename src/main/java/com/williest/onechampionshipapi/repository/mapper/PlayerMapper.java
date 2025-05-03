@@ -42,8 +42,8 @@ public class PlayerMapper implements Function<ResultSet, Player> {
             Club club = Club.builder().id((UUID) (rs.getObject("club_id"))).build();
             club.setName(rs.getString("club_name"));
             club.setAcronym(rs.getString("acronym"));
-            club.setCreationYear(rs.getString("creation_year"));
-            club.setStadiumName(rs.getString("stadium_name"));
+            club.setYearCreation(rs.getString("creation_year"));
+            club.setStadium(rs.getString("stadium_name"));
 
             UUID coachId = (UUID) rs.getObject("coach_id");
             Coach coach = this.coachDAO.findById(coachId);

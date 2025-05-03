@@ -12,12 +12,12 @@ public class Club {
     @Builder.Default
     private final UUID id = UUID.randomUUID();
     private String name;
-    private String creationYear;
     private String acronym;
-    private String stadiumName;
+    private String yearCreation;
+    private String stadium;
     private League league;
-    private List<Player> players;
     private Coach coach;
     private List<ClubStatistic> clubStatistics;
+    private List<Player> players;
     private Ranking ranking;
 }

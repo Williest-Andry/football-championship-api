@@ -1,5 +1,6 @@
 package com.williest.onechampionshipapi.model;
 
+import com.williest.onechampionshipapi.model.enumeration.MatchStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,9 +13,11 @@ import java.util.UUID;
 public class Match {
     @Builder.Default
     private final UUID id = UUID.randomUUID();
-    private LocalDateTime matchDate;
-    private Club homeTeam;
-    private Club awayTeam;
+    private MatchClub clubPlayingHome;
+    private MatchClub clubPlayingAway;
+    private String stadium;
+    private LocalDateTime matchDateTime;
+    private MatchStatus actualStatus;
     private League league;
     private List<PlayerStatistic> playerStatistics;
     private List<ClubStatistic> clubStatistics;

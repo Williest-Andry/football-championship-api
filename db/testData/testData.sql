@@ -1,5 +1,43 @@
-INSERT INTO season (season_id, begin_date, end_date) VALUES
-    ('e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b', '2024-09-01', '2025-06-30');
+-- Saison 2024 (UUID fourni)
+INSERT INTO season VALUES (
+                              'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
+                              '2024',
+                              'S2024-2025',
+                              'STARTED'
+                          );
+
+-- Saison 2023
+INSERT INTO season VALUES (
+                              'b32a1a52-0bcd-4d8b-89c1-f3d123456789',
+                              '2023',
+                              'S2023-2024',
+                              'FINISHED'
+                          );
+
+-- Saison 2025
+INSERT INTO season VALUES (
+                              '0e72dce5-6e34-4919-8f6d-afe112233445',
+                              '2025',
+                              'S2025-2026',
+                              'NOT_STARTED'
+                          );
+
+-- Saison 2022
+INSERT INTO season VALUES (
+                              '5c8e37d9-fbd4-4e78-a5c4-dc3344556677',
+                              '2022',
+                              'S2022-2023',
+                              'FINISHED'
+                          );
+
+-- Saison 2026
+INSERT INTO season VALUES (
+                              '9a1b2c3d-4e5f-6789-aaaa-bbccddeeff00',
+                              '2026',
+                              'S2026-2027',
+                              'NOT_STARTED'
+                          );
+
 
 INSERT INTO league (league_id, league_name, country) VALUES
     ('d4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 'LA_LIGA', 'Spain');
@@ -84,16 +122,21 @@ INSERT INTO club (
 INSERT INTO match (
     match_id,
     league_id,
-    match_date,
-    home_team,
-    away_team
+    match_date_time,
+    club_playing_home,
+    club_playing_away,
+    stadium,
+    actual_status
 ) VALUES (
              'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b',
              '2025-04-12 20:00:00',
-             'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c', -- FC Barcelona
-             'fedcba98-7654-3210-bcde-9876543210ff'  -- Real Madrid
+             'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
+             'fedcba98-7654-3210-bcde-9876543210ff',
+             'Lluís Companys',
+             'NOT_STARTED'
          );
+
 
 INSERT INTO player (
     player_id,

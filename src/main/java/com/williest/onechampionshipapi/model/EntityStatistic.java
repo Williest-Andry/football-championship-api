@@ -1,14 +1,15 @@
 package com.williest.onechampionshipapi.model;
 
-import lombok.Builder;
 import lombok.Data;
-
 import java.util.UUID;
 
-@Builder
 @Data
 public abstract class EntityStatistic {
-    @Builder.Default
-    private final UUID id = UUID.randomUUID();
+    private UUID id;
     private int scoredGoals;
+
+    public EntityStatistic(UUID id, int scoredGoals) {
+        this.id = id != null ? id : UUID.randomUUID();
+        this.scoredGoals = scoredGoals;
+    }
 }

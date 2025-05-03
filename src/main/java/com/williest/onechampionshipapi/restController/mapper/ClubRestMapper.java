@@ -20,9 +20,9 @@ public class ClubRestMapper implements Function<Club, ClubRest> {
         return new ClubRest(
                 club.getId(),
                 club.getName(),
-                club.getCreationYear(),
+                club.getYearCreation(),
                 club.getAcronym(),
-                club.getStadiumName(),
+                club.getStadium(),
                 coachRest
         );
     }
