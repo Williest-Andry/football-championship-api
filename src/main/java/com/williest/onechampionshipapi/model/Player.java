@@ -19,7 +19,7 @@ public class Player {
     private String birth_year;
     private PlayerPosition playerPosition;
     private Club club;
-    private List<PlayerStatistic> playerStatistics;
+    private List<PlayerStatistics> playerStatistics;
 
     public int getAge(){
         return LocalDate.now().getYear() - Integer.parseInt(birth_year);

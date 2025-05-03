@@ -17,7 +17,7 @@ public class Club {
     private String stadium;
     private League league;
     private Coach coach;
-    private List<ClubStatistic> clubStatistics;
+    private List<ClubStatistics> clubStatistics;
     private List<Player> players;
     private Ranking ranking;
 }

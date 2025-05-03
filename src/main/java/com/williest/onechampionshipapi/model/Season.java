@@ -4,7 +4,6 @@ import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,8 +15,8 @@ public class Season {
     private int year;
     private String alias;
     private SeasonStatus status;
-    private List<ClubStatistic> clubStatistics;
-    private List<PlayerStatistic> playerStatistics;
+    private List<ClubStatistics> clubStatistics;
+    private List<PlayerStatistics> playerStatistics;
 
     public String getAlias(){
         if(alias.length() != 10){

@@ -9,10 +9,10 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class PlayerStatistic extends EntityStatistic{
+public class PlayerStatistics extends EntityStatistics {
     private PlayerPlayingTime playingTime;
 
-    public PlayerStatistic(UUID id, int scoredGoals, PlayerPlayingTime playingTime) {
+    public PlayerStatistics(UUID id, int scoredGoals, PlayerPlayingTime playingTime) {
         super(id, scoredGoals);
         this.playingTime = playingTime;
     }

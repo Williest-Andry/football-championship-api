@@ -1,7 +1,7 @@
 package com.williest.onechampionshipapi.service;
 
 import com.williest.onechampionshipapi.model.Player;
-import com.williest.onechampionshipapi.model.PlayerStatistic;
+import com.williest.onechampionshipapi.model.PlayerStatistics;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerStatisticDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
-import static java.lang.Float.NaN;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +64,7 @@ public class PlayerService implements EntityService<Player> {
         return entities.stream().map(this::save).toList();
     }
 
-    public PlayerStatistic getPlayerStatistics(String playerId, int seasonYear){
+    public PlayerStatistics getPlayerStatistics(String playerId, int seasonYear){
         UUID validPlayerId = IdVerification.validUUID(playerId);
         Player foundPlayer = this.playerDAO.findById(validPlayerId);
         if(foundPlayer == null){
@@ -78,8 +76,7 @@ public class PlayerService implements EntityService<Player> {
             throw new ClientException("The season year should be 4 digits");
         }
 
-
-        return this.playerStatisticDAO.findByPlayerIdAndSeasonYear();
+        return this.playerStatisticDAO.findByPlayerIdAndSeasonYear(validPlayerId, seasonYear);
     }
 
     @Override

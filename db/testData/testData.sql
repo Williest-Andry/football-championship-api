@@ -333,3 +333,55 @@ INSERT INTO player_statistic VALUES (
                                         0,
                                         90.0
                                     );
+
+
+-- Robert Lewandowski (FCB)
+INSERT INTO goal (
+    goal_id,
+    club_id,
+    player_id,
+    score,
+    minute_of_goal,
+    own_goal
+) VALUES (
+             '30000000-aaaa-bbbb-cccc-000000000001',
+             'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
+             'd8a1b69c-2499-4fd2-8d0c-28cfbd1f5ed0',
+             1,
+             34,
+             FALSE
+         );
+
+-- Gavi (FCB)
+INSERT INTO goal (
+    goal_id,
+    club_id,
+    player_id,
+    score,
+    minute_of_goal,
+    own_goal
+) VALUES (
+             '30000000-aaaa-bbbb-cccc-000000000002',
+             'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
+             '0f87f6e2-ae38-4983-9252-cd8b589f2a5b',
+             1,
+             52,
+             FALSE
+         );
+
+-- Vinicius Junior (RMA)
+INSERT INTO goal (
+    goal_id,
+    club_id,
+    player_id,
+    score,
+    minute_of_goal,
+    own_goal
+) VALUES (
+             '30000000-aaaa-bbbb-cccc-000000000003',
+             'fedcba98-7654-3210-bcde-9876543210ff',
+             '10000000-aaaa-bbbb-cccc-000000000001',
+             1,
+             76,
+             FALSE
+         );

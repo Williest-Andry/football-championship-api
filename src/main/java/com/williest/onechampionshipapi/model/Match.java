@@ -19,6 +19,6 @@ public class Match {
     private LocalDateTime matchDateTime;
     private MatchStatus actualStatus;
     private League league;
-    private List<PlayerStatistic> playerStatistics;
-    private List<ClubStatistic> clubStatistics;
+    private List<PlayerStatistics> playerStatistics;
+    private List<ClubStatistics> clubStatistics;
 }

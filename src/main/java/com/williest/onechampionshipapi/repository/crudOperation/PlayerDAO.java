@@ -35,12 +35,13 @@ public class PlayerDAO implements EntityDAO<Player> {
             sqlRequest += " WHERE player_name ILIKE '%" + playerName + "%' AND club_name ILIKE '%" + clubName + "%'";
         }
 
-        try(Connection dbConnection = dataSourceDB.getConnection()){
-            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);
-            ResultSet rs = select.executeQuery();
-            while(rs.next()){
-                Player player = this.playerMapper.apply(rs);
-                players.add(player);
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            try(ResultSet rs = select.executeQuery();){
+                while(rs.next()){
+                    Player player = this.playerMapper.apply(rs);
+                    players.add(player);
+                }
             }
         } catch(SQLException e){
             throw new ServerException("ERROR IN FIND ALL PLAYERS : " + e.getMessage());
@@ -53,13 +54,14 @@ public class PlayerDAO implements EntityDAO<Player> {
     public Player findById(UUID id) {
         Player foundPlayer = null;
 
-        try(Connection dbConnection = dataSourceDB.getConnection()){
-            sqlRequest = "SELECT * FROM player WHERE player_id = ?";
-            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);
+        sqlRequest = "SELECT * FROM player WHERE player_id = ?";
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, id);
-            ResultSet rs = select.executeQuery();
-            if(rs.next()){
-                foundPlayer = this.playerMapper.applyWithoutClub(rs);
+            try(ResultSet rs = select.executeQuery();){
+                if(rs.next()){
+                    foundPlayer = this.playerMapper.applyWithoutClub(rs);
+                }
             }
         } catch(SQLException e){
             throw new ServerException("ERROR IN FIND PLAYER BY ID : " + e.getMessage());
@@ -76,9 +78,9 @@ public class PlayerDAO implements EntityDAO<Player> {
 
         UUID savedPlayerId = null;
 
-        try(Connection dbConnection = dataSourceDB.getConnection()){
-            sqlRequest = "INSERT INTO player VALUES (?,?,?,?,?,?,?::player_position_in_field) RETURNING player_id;";
-            PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);
+        sqlRequest = "INSERT INTO player VALUES (?,?,?,?,?,?,?::player_position_in_field) RETURNING player_id;";
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);){
             insert.setObject(1, player.getId());
             insert.setObject(2, null);
             insert.setString(3, player.getName());
@@ -86,9 +88,10 @@ public class PlayerDAO implements EntityDAO<Player> {
             insert.setString(5, player.getNationality());
             insert.setString(6, player.getBirth_year());
             insert.setString(7, player.getPlayerPosition().toString());
-            ResultSet rs = insert.executeQuery();
-            if(rs.next()){
-                savedPlayerId = (UUID) rs.getObject("player_id");
+            try(ResultSet rs = insert.executeQuery();){
+                if(rs.next()){
+                    savedPlayerId = (UUID) rs.getObject("player_id");
+                }
             }
         } catch(SQLException e){
             throw new ServerException("ERROR IN SAVE PLAYER : " + e.getMessage());
@@ -104,10 +107,10 @@ public class PlayerDAO implements EntityDAO<Player> {
 
     @Override
     public Player update(Player player) {
-        try(Connection dbConnection = dataSourceDB.getConnection()){
-            sqlRequest = "UPDATE player SET club_id = ?, player_name = ?, player_number = ?, player_nationality = ?," +
+        sqlRequest = "UPDATE player SET club_id = ?, player_name = ?, player_number = ?, player_nationality = ?," +
                     " player_birth_year = ?, player_position = ?::player_position_in_field WHERE player_id = ?";
-            PreparedStatement update = dbConnection.prepareStatement(sqlRequest);
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement update = dbConnection.prepareStatement(sqlRequest);){
             update.setObject(1, player.getClub() != null? player.getClub().getId() : null);
             update.setString(2, player.getName());
             update.setInt(3, player.getNumber());
