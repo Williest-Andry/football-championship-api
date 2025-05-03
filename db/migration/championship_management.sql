@@ -2,10 +2,12 @@ DROP DATABASE IF EXISTS championship_management;
 CREATE DATABASE championship_management;
 \c championship_management
 
+CREATE TYPE season_status AS ENUM ('NOT_STARTED', 'STARTED', 'FINISHED');
 CREATE TABLE season(
     season_id UUID PRIMARY KEY,
-    begin_date DATE NOT NULL,
-    end_date DATE NOT NULL
+    year VARCHAR(4) NOT NULL,
+    alias VARCHAR(10) NOT NULL,
+    status season_status NOT NULL
 );
 
 CREATE TYPE league_country AS ENUM ('England', 'Spain', 'Germany', 'Italy', 'France');
@@ -45,12 +47,15 @@ CREATE TABLE club(
     stadium_name VARCHAR NOT NULL
 );
 
+CREATE TYPE match_status AS ENUM ('NOT_STARTED','STARTED','FINISHED');
 CREATE TABLE match(
     match_id UUID PRIMARY KEY,
     league_id UUID REFERENCES league(league_id) NOT NULL,
-    match_date TIMESTAMP,
-    home_team UUID REFERENCES club(club_id) NOT NULL,
-    away_team UUID REFERENCES club(club_id) NOT NULL
+    match_date_time TIMESTAMP NOT NULL,
+    club_playing_home UUID REFERENCES club(club_id) NOT NULL,
+    club_playing_away UUID REFERENCES club(club_id) NOT NULL,
+    stadium VARCHAR NOT NULL,
+    actual_status match_status NOT NULL
 );
 
 CREATE TYPE player_position_in_field AS ENUM ('STRIKER', 'MIDFIELDER', 'DEFENDER', 'GOALKEEPER');
@@ -82,4 +87,13 @@ CREATE TABLE club_statistic(
     conceded_goals INT NOT NULL,
     difference_goals INT NOT NULL,
     clean_sheet_number INT NOT NULL
+);
+
+CREATE TABLE goal (
+    goal_id UUID PRIMARY KEY,
+    club_id UUID REFERENCES club(club_id),
+    player_id UUID REFERENCES player(player_id),
+    score INT NOT NULL,
+    minute_of_goal INT NOT NULL,
+    own_goal BOOLEAN NOT NULL
 );
