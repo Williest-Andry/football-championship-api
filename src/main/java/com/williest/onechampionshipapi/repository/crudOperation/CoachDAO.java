@@ -2,6 +2,7 @@ package com.williest.onechampionshipapi.repository.crudOperation;
 
 import com.williest.onechampionshipapi.model.Coach;
 import com.williest.onechampionshipapi.repository.DataSourceDB;
+import com.williest.onechampionshipapi.repository.mapper.CoachMapper;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class CoachDAO implements EntityDAO<Coach>{
     private final DataSourceDB dataSourceDB;
     private String sqlRequest;
+    private final CoachMapper coachMapper;
 
     @Override
     public Coach findById(UUID id) {
@@ -29,10 +31,7 @@ public class CoachDAO implements EntityDAO<Coach>{
             select.setObject(1, id);
             try(ResultSet rs = select.executeQuery()){
                 if(rs.next()){
-                    foundCoach = Coach.builder()
-                            .id((UUID) rs.getObject("coach_id")).build();
-                    foundCoach.setName(rs.getString("coach_name"));
-                    foundCoach.setNationality(rs.getString("coach_nationality"));
+                    foundCoach = this.coachMapper.apply(rs);
                 }
             }
 
