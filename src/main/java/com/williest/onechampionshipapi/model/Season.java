@@ -1,5 +1,6 @@
 package com.williest.onechampionshipapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +13,12 @@ import java.util.UUID;
 public class Season {
     @Builder.Default
     private final UUID id = UUID.randomUUID();
+    private SeasonStatus status;
     private int year;
     private String alias;
-    private SeasonStatus status;
+    @JsonIgnore
     private List<ClubStatistics> clubStatistics;
+    @JsonIgnore
     private List<PlayerStatistics> playerStatistics;
 
     public String getAlias(){

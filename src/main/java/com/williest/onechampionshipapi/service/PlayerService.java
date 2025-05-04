@@ -32,10 +32,12 @@ public class PlayerService implements EntityService<Player> {
         }
 
         List<Player> foundPlayers = this.playerDAO.findAll(playerName, clubName);
-        List<Player> foundPlayersWithoutClub = this.playerDAO.findAllWithoutClub(playerName, clubName);
+        List<Player> foundPlayersWithoutClub = this.playerDAO.findAllWithoutClub(playerName);
         foundPlayersWithoutClub.forEach(player -> {
             player.setClub(null);
-            foundPlayers.add(player);
+            if(clubName == null){
+                foundPlayers.add(player);
+            }
         });
 
         if(ageMinimum != null && ageMaximum == null) {
