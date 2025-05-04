@@ -1,6 +1,7 @@
 package com.williest.onechampionshipapi.repository.crudOperation;
 
 import com.williest.onechampionshipapi.model.Season;
+import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.mapper.SeasonMapper;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
@@ -43,26 +44,59 @@ public class SeasonDAO implements EntityDAO<Season> {
 
     @Override
     public Season findById(UUID id) {
-        return null;
+        Season season = null;
+        sqlRequest = "SELECT * FROM season WHERE season_id = ?;";
+
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, id);
+            try (ResultSet rs = select.executeQuery()){
+                while (rs.next()){
+                    season = this.seasonMapper.apply(rs);
+                }
+            }
+        } catch(SQLException e) {
+            throw new ServerException("ERROR IN FIND SEASON ID : " + e.getMessage());
+        }
+
+        return season;
     }
 
     @Override
-    public Season save(Season entity) {
-        return null;
+    public Season save(Season season) {
+        UUID savedSeasonId = null;
+        sqlRequest = "INSERT INTO season VALUES (?,?,?,?::season_status) RETURNING season_id;";
+
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, season.getId());
+            select.setString(2, String.valueOf(season.getYear()));
+            select.setString(3, season.getValidAlias());
+            select.setString(4, season.getStatus().toString());
+            try(ResultSet rs = select.executeQuery()){
+                if(rs.next()){
+                    savedSeasonId = (UUID) rs.getObject("season_id");
+                }
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN SAVE SEASON : " + e.getMessage());
+        }
+
+        return this.findById(savedSeasonId);
     }
 
     @Override
-    public List<Season> saveAll(List<Season> entities) {
-        return List.of();
+    public List<Season> saveAll(List<Season> seasons) {
+        return seasons.stream().map(this::save).toList();
     }
 
     @Override
     public Season update(Season entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Season deleteById(UUID id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
