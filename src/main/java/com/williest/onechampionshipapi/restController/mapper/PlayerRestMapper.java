@@ -31,7 +31,10 @@ public class PlayerRestMapper implements Function<Player, PlayerRest> {
 
     @Override
     public PlayerRest apply(Player player) {
-        ClubRest clubRest = this.clubRestMapper.apply(player.getClub());
+        ClubRest clubRest = null;
+        if(player.getClub() != null){
+            clubRest = this.clubRestMapper.apply(player.getClub());
+        }
 
         return new PlayerRest(
                 player.getId(),

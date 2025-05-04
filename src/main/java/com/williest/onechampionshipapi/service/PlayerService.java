@@ -3,7 +3,7 @@ package com.williest.onechampionshipapi.service;
 import com.williest.onechampionshipapi.model.Player;
 import com.williest.onechampionshipapi.model.PlayerStatistics;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
-import com.williest.onechampionshipapi.repository.crudOperation.PlayerStatisticDAO;
+import com.williest.onechampionshipapi.repository.crudOperation.PlayerStatisticsDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PlayerService implements EntityService<Player> {
     private final PlayerDAO playerDAO;
-    private final PlayerStatisticDAO playerStatisticDAO;
+    private final PlayerStatisticsDAO playerStatisticsDAO;
 
     public List<Player> getAllPlayers(String playerName, Integer ageMinimum, Integer ageMaximum, String clubName) {
         if(playerName != null && playerName.isEmpty()) {
@@ -32,6 +32,11 @@ public class PlayerService implements EntityService<Player> {
         }
 
         List<Player> foundPlayers = this.playerDAO.findAll(playerName, clubName);
+        List<Player> foundPlayersWithoutClub = this.playerDAO.findAllWithoutClub(playerName, clubName);
+        foundPlayersWithoutClub.forEach(player -> {
+            player.setClub(null);
+            foundPlayers.add(player);
+        });
 
         if(ageMinimum != null && ageMaximum == null) {
             return foundPlayers.stream().filter(player -> player.getAge() >= ageMinimum).toList();
@@ -76,7 +81,7 @@ public class PlayerService implements EntityService<Player> {
             throw new ClientException("The season year should be 4 digits");
         }
 
-        return this.playerStatisticDAO.findByPlayerIdAndSeasonYear(validPlayerId, seasonYear);
+        return this.playerStatisticsDAO.findByPlayerIdAndSeasonYear(validPlayerId, seasonYear);
     }
 
     @Override

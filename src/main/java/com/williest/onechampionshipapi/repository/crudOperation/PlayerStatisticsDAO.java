@@ -1,9 +1,8 @@
 package com.williest.onechampionshipapi.repository.crudOperation;
 
-import com.williest.onechampionshipapi.model.PlayerPlayingTime;
 import com.williest.onechampionshipapi.model.PlayerStatistics;
-import com.williest.onechampionshipapi.model.enumeration.DurationUnit;
 import com.williest.onechampionshipapi.repository.DataSourceDB;
+import com.williest.onechampionshipapi.repository.mapper.PlayerStatisticsMapper;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,9 +16,10 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class PlayerStatisticDAO implements EntityDAO<PlayerStatistics> {
+public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
     private final DataSourceDB dataSourceDB;
     private String sqlRequest;
+    private final PlayerStatisticsMapper playerStatisticsMapper;
 
     public PlayerStatistics findByPlayerNoGoal(UUID playerId, int seasonYear){
         PlayerStatistics playerStatistics = null;
@@ -36,18 +36,7 @@ public class PlayerStatisticDAO implements EntityDAO<PlayerStatistics> {
             select.setInt(2, seasonYear);
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()) {
-                    double totalTimeMinute = rs.getDouble("total_time_playing");
-                    double totalTimeSecond = totalTimeMinute * 60;
-                    PlayerPlayingTime totalTimePlaying = new PlayerPlayingTime(
-                            totalTimeSecond,
-                            DurationUnit.SECOND
-                    );
-
-                    playerStatistics = new PlayerStatistics(
-                            (UUID) rs.getObject("player_statistic_id"),
-                            0,
-                            totalTimePlaying
-                    );
+                    playerStatistics = this.playerStatisticsMapper.apply(rs);
                 }
             }
         } catch(SQLException e){
@@ -73,18 +62,7 @@ public class PlayerStatisticDAO implements EntityDAO<PlayerStatistics> {
             select.setInt(2, seasonYear);
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()) {
-                    double totalTimeMinute = rs.getDouble("total_time_playing");
-                    double totalTimeSecond = totalTimeMinute * 60;
-                    PlayerPlayingTime totalTimePlaying = new PlayerPlayingTime(
-                            totalTimeSecond,
-                            DurationUnit.SECOND
-                    );
-
-                    playerStatistics = new PlayerStatistics(
-                            (UUID) rs.getObject("player_statistic_id"),
-                            rs.getInt("total_goals"),
-                            totalTimePlaying
-                    );
+                    playerStatistics = this.playerStatisticsMapper.apply(rs);
                 } else{
                     return this.findByPlayerNoGoal(playerId, seasonYear);
                 }

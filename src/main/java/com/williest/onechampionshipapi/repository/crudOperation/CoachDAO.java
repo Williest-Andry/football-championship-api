@@ -23,17 +23,19 @@ public class CoachDAO implements EntityDAO<Coach>{
     public Coach findById(UUID id) {
         Coach foundCoach = null;
 
-        try(Connection dbConnection = dataSourceDB.getConnection()){
-            sqlRequest = "SELECT * FROM coach WHERE coach_id = ?";
-            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);
+        sqlRequest = "SELECT * FROM coach WHERE coach_id = ?";
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, id);
-            ResultSet rs = select.executeQuery();
-            if(rs.next()){
-                foundCoach = Coach.builder()
-                        .id((UUID) rs.getObject("coach_id")).build();
-                foundCoach.setName(rs.getString("coach_name"));
-                foundCoach.setNationality(rs.getString("coach_nationality"));
+            try(ResultSet rs = select.executeQuery()){
+                if(rs.next()){
+                    foundCoach = Coach.builder()
+                            .id((UUID) rs.getObject("coach_id")).build();
+                    foundCoach.setName(rs.getString("coach_name"));
+                    foundCoach.setNationality(rs.getString("coach_nationality"));
+                }
             }
+
         } catch(SQLException e){
             throw new ServerException("ERROR IN FIND COACH BY ID : " + e.getMessage());
         }

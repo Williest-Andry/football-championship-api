@@ -50,6 +50,34 @@ public class PlayerDAO implements EntityDAO<Player> {
         return players;
     }
 
+    public List<Player> findAllWithoutClub(String playerName, String clubName){
+        List<Player> players = new ArrayList<>();
+        sqlRequest = "SELECT * FROM player WHERE club_id IS NULL;";
+        if(playerName != null && clubName == null){
+            sqlRequest += " WHERE player_name ILIKE '%" + playerName + "%'";
+        }
+        if(clubName != null && playerName == null){
+            sqlRequest += " WHERE club_name ILIKE '%" + clubName + "%'";
+        }
+        if(playerName != null && clubName != null){
+            sqlRequest += " WHERE player_name ILIKE '%" + playerName + "%' AND club_name ILIKE '%" + clubName + "%'";
+        }
+
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            try(ResultSet rs = select.executeQuery();){
+                while(rs.next()){
+                    Player player = this.playerMapper.applyWithoutClub(rs);
+                    players.add(player);
+                }
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN FIND ALL PLAYERS WITHOUT CLUB : " + e.getMessage());
+        }
+
+        return players;
+    }
+
     @Override
     public Player findById(UUID id) {
         Player foundPlayer = null;
