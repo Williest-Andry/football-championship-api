@@ -62,8 +62,30 @@ public class SeasonDAO implements EntityDAO<Season> {
         return season;
     }
 
+    public Season findByYear(String seasonYear){
+        Season season = null;
+        sqlRequest = "SELECT * FROM season WHERE year = ?;";
+
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setString(1, seasonYear);
+            try (ResultSet rs = select.executeQuery()){
+                while (rs.next()){
+                    season = this.seasonMapper.apply(rs);
+                }
+            }
+        } catch(SQLException e) {
+            throw new ServerException("ERROR IN FIND SEASON YEAR : " + e.getMessage());
+        }
+
+        return season;
+    }
+
     @Override
     public Season save(Season season) {
+        if(this.findById(season.getId()) != null){
+            return this.update(season);
+        }
         UUID savedSeasonId = null;
         sqlRequest = "INSERT INTO season VALUES (?,?,?,?::season_status) RETURNING season_id;";
 
@@ -91,8 +113,18 @@ public class SeasonDAO implements EntityDAO<Season> {
     }
 
     @Override
-    public Season update(Season entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Season update(Season season) {
+        sqlRequest = "UPDATE season SET status = ?::season_status WHERE season_id = ?;";
+        try (Connection dbConnection = dataSource.getConnection();
+             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setString(1, season.getStatus().toString());
+            select.setObject(2, season.getId());
+            select.executeUpdate();
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN UPDATE SEASON : " + e.getMessage());
+        }
+
+        return this.findById(season.getId());
     }
 
     @Override

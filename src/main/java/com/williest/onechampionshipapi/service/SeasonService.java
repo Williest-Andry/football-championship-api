@@ -3,6 +3,9 @@ package com.williest.onechampionshipapi.service;
 import com.williest.onechampionshipapi.model.Season;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.crudOperation.SeasonDAO;
+import com.williest.onechampionshipapi.restController.createRestEntity.UpdateSeasonStatus;
+import com.williest.onechampionshipapi.service.exception.ClientException;
+import com.williest.onechampionshipapi.service.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +33,25 @@ public class SeasonService implements EntityService<Season> {
 
     @Override
     public List<Season> saveAll(List<Season> seasons) {
-        seasons.forEach(season -> season.setStatus(SeasonStatus.NOT_STARTED));
+        seasons.forEach(season -> {
+            Season foundSeason = this.seasonDAO.findByYear(String.valueOf(season.getYear()));
+            if (foundSeason != null) {
+                throw new ClientException("Season with year : " + season.getYear() + " already exists");
+            }
+            season.updateStatus(SeasonStatus.NOT_STARTED);
+        });
         return seasonDAO.saveAll(seasons);
+    }
+
+    public Season updateStatus(String seasonYear, UpdateSeasonStatus status) {
+        Season foundSeason = this.seasonDAO.findByYear(seasonYear);
+        if(foundSeason == null){
+            throw new NotFoundException("Season with year : " + seasonYear + " not found");
+        }
+
+        foundSeason.updateStatus(status.getStatus());
+
+        return this.save(foundSeason);
     }
 
     @Override

@@ -5,7 +5,7 @@ CREATE DATABASE championship_management;
 CREATE TYPE season_status AS ENUM ('NOT_STARTED', 'STARTED', 'FINISHED');
 CREATE TABLE season(
     season_id UUID PRIMARY KEY,
-    year VARCHAR(4) NOT NULL,
+    year VARCHAR(4) UNIQUE NOT NULL,
     alias VARCHAR(10) NOT NULL,
     status season_status NOT NULL
 );

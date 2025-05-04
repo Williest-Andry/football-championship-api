@@ -2,16 +2,16 @@ package com.williest.onechampionshipapi.restController;
 
 import com.williest.onechampionshipapi.model.Season;
 import com.williest.onechampionshipapi.restController.createRestEntity.CreateSeason;
+import com.williest.onechampionshipapi.restController.createRestEntity.UpdateSeasonStatus;
 import com.williest.onechampionshipapi.restController.mapper.SeasonRestMapper;
 import com.williest.onechampionshipapi.service.SeasonService;
 import com.williest.onechampionshipapi.service.exception.ClientException;
+import com.williest.onechampionshipapi.service.exception.NotFoundException;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +41,20 @@ public class SeasonController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch(ClientException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/seasons/{seasonYear}/status")
+    public ResponseEntity<Object> updateSeasonStatus(@PathVariable String seasonYear, @RequestBody UpdateSeasonStatus status) {
+        try{
+            Season updatedSeason = this.seasonService.updateStatus(seasonYear, status);
+            return ResponseEntity.ok().body(updatedSeason);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }  catch(NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
