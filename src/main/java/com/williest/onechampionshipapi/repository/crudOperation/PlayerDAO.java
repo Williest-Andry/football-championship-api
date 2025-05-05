@@ -72,6 +72,26 @@ public class PlayerDAO implements EntityDAO<Player> {
         return players;
     }
 
+    public List<Player> findAllByClubId(UUID clubId){
+        List<Player> players = new ArrayList<>();
+        sqlRequest = "SELECT * FROM player WHERE club_id = ? ";
+
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, clubId);
+            try(ResultSet rs = select.executeQuery();){
+                while(rs.next()){
+                    Player player = this.playerMapper.applyWithoutClub(rs);
+                    players.add(player);
+                }
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN FIND ALL PLAYERS BY CLUB ID : " + e.getMessage());
+        }
+
+        return players;
+    }
+
     @Override
     public Player findById(UUID id) {
         Player foundPlayer = null;

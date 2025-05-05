@@ -1,7 +1,9 @@
 package com.williest.onechampionshipapi.service;
 
+import com.williest.onechampionshipapi.model.Club;
 import com.williest.onechampionshipapi.model.Player;
 import com.williest.onechampionshipapi.model.PlayerStatistics;
+import com.williest.onechampionshipapi.repository.crudOperation.ClubDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerStatisticsDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class PlayerService implements EntityService<Player> {
     private final PlayerDAO playerDAO;
     private final PlayerStatisticsDAO playerStatisticsDAO;
+    private final ClubDAO clubDAO;
 
     public List<Player> getAllPlayers(String playerName, Integer ageMinimum, Integer ageMaximum, String clubName) {
         if(playerName != null && playerName.isEmpty()) {
@@ -81,6 +84,16 @@ public class PlayerService implements EntityService<Player> {
         }
 
         return this.playerStatisticsDAO.findByPlayerIdAndSeasonYear(validPlayerId, seasonYear);
+    }
+
+    public List<Player> getClubPlayersByClubId(String clubId){
+        UUID validClubId = IdVerification.validUUID(clubId);
+        Club foundClub = this.clubDAO.findById(validClubId);
+        if(foundClub == null){
+            throw new ClientException("The club with id : " + clubId + " does exist");
+        }
+
+        return this.playerDAO.findAllByClubId(validClubId);
     }
 
     @Override
