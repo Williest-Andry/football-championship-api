@@ -84,4 +84,21 @@ public class ClubController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PostMapping("/clubs/{id}/players")
+    public ResponseEntity<Object> addPlayersToClub(@PathVariable String id, @RequestBody List<CreatePlayer> playersToAdd){
+        try{
+            List<Player> players = playersToAdd.stream().map(this.playerRestMapper::toModel).toList();
+            List<Player> addedPlayers = this.clubService.addClubPlayers(id, players);
+            List<SavedPlayerRest> updatedPlayersRest = addedPlayers.stream().map(this.playerRestMapper::applyWithoutClub)
+                    .toList();
+            return ResponseEntity.ok().body(updatedPlayersRest);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

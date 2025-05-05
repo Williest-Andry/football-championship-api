@@ -10,6 +10,7 @@ import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,6 +80,44 @@ public class ClubService implements EntityService<Club> {
         });
 
         foundClub.addPlayers(players);
+
+        Club savedClub = this.save(foundClub);
+        return savedClub.getPlayers();
+    }
+
+    public List<Player> addClubPlayers(String clubId, List<Player> players){
+        Club foundClub = this.getById(clubId);
+        List<Player> existingPlayers = foundClub.getPlayers();
+
+        players.forEach(player -> {
+            Player foundPlayer = null;
+            try {
+                foundPlayer = this.playerService.getById(player.getId().toString());
+            } catch (Exception e) {
+                foundPlayer = this.playerDAO.save(player);
+            }
+
+            UUID foundPlayerClubId = foundPlayer.getClub().getId();
+            if(foundPlayerClubId != null && !foundPlayerClubId.toString().equals(clubId)){
+                throw new ClientException("The player with id : " + player.getId() +
+                        " has already a club with id : " + foundPlayer.getClub().getId());
+            }
+        });
+
+        List<Player> noUpdatePlayers = new ArrayList<>();
+
+        existingPlayers.forEach(player -> {
+            Player inThisClubPlayer = players.stream()
+                    .filter(p -> p.getId().toString().equals(player.getId().toString())).findFirst().orElse(null);
+            if(inThisClubPlayer != null){
+                noUpdatePlayers.add(inThisClubPlayer);
+            }
+        });
+
+        List<Player> playersToAdd = new ArrayList<>(players);
+        playersToAdd.removeAll(noUpdatePlayers);
+
+        foundClub.addPlayers(playersToAdd);
 
         Club savedClub = this.save(foundClub);
         return savedClub.getPlayers();
