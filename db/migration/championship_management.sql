@@ -38,9 +38,9 @@ CREATE TABLE ranking(
 
 CREATE TABLE club(
     club_id UUID PRIMARY KEY,
-    league_id UUID REFERENCES league(league_id) NOT NULL,
+    league_id UUID REFERENCES league(league_id),
     coach_id UUID REFERENCES coach(coach_id) NOT NULL,
-    ranking_id UUID REFERENCES ranking(ranking_id) NOT NULL,
+    ranking_id UUID REFERENCES ranking(ranking_id),
     club_name VARCHAR UNIQUE NOT NULL,
     creation_year VARCHAR(4) NOT NULL,
     acronym VARCHAR(3) NOT NULL,

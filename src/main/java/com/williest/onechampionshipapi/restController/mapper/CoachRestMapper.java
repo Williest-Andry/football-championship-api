@@ -18,4 +18,10 @@ public class CoachRestMapper implements Function<Coach, CoachRest> {
                 coach.getNationality()
         );
     }
+
+    public Coach toModel(CoachRest coachRest) {
+        return Coach.builder()
+                .name(coachRest.getName())
+                .nationality(coachRest.getNationality()).build();
+    }
 }

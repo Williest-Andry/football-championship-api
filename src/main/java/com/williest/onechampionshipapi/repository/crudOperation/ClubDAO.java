@@ -43,22 +43,75 @@ public class ClubDAO implements EntityDAO<Club>{
 
     @Override
     public Club findById(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Club foundClub = null;
+        sqlRequest = "SELECT club_id, coach_id, club_name, creation_year, acronym, stadium_name FROM club WHERE club_id = ?;";
+
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, id);
+            try(ResultSet rs = select.executeQuery()){
+                if(rs.next()){
+                    foundClub = this.clubMapper.apply(rs);
+                }
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN FIND ALL CLUBS : " + e.getMessage());
+        }
+
+        return foundClub;
     }
 
     @Override
-    public Club save(Club entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Club save(Club club) {
+        if(this.findById(club.getId()) != null){
+            return this.update(club);
+        }
+        UUID savedClubId = null;
+        sqlRequest = "INSERT INTO club(club_id, coach_id, club_name, creation_year, acronym, stadium_name) " +
+                "VALUES(?,?,?,?,?,?) RETURNING club_id;";
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, club.getId());
+            select.setObject(2, club.getCoach().getId());
+            select.setString(3, club.getName());
+            select.setString(4, club.getYearCreation());
+            select.setString(5, club.getAcronym());
+            select.setString(6, club.getStadium());
+            try(ResultSet rs = select.executeQuery()){
+                if(rs.next()){
+                    savedClubId = ((UUID) rs.getObject("club_id"));
+                }
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN SAVE CLUB : " + e.getMessage());
+        }
+
+        return this.findById(savedClubId);
     }
 
     @Override
-    public List<Club> saveAll(List<Club> entities) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Club> saveAll(List<Club> clubs) {
+        return clubs.stream().map(this::save).toList();
     }
 
     @Override
-    public Club update(Club entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Club update(Club club) {
+        sqlRequest = "UPDATE club SET coach_id = ?, club_name = ?, creation_year = ?, acronym = ?, stadium_name = ?" +
+                " WHERE club_id = ?;";
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, club.getCoach().getId());
+            select.setString(2, club.getName());
+            select.setString(3, club.getYearCreation());
+            select.setString(4, club.getAcronym());
+            select.setString(5, club.getStadium());
+            select.setObject(6, club.getId());
+            select.executeUpdate();
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN UPDATE CLUB : " + e.getMessage());
+        }
+
+        return this.findById(club.getId());
     }
 
     @Override

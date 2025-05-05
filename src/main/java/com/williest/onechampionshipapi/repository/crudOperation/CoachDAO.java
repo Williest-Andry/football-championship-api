@@ -42,6 +42,26 @@ public class CoachDAO implements EntityDAO<Coach>{
         return foundCoach;
     }
 
+    public Coach findByName(String name){
+        Coach foundCoach = null;
+
+        sqlRequest = "SELECT * FROM coach WHERE coach_name= ?";
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, name);
+            try(ResultSet rs = select.executeQuery()){
+                if(rs.next()){
+                    foundCoach = this.coachMapper.apply(rs);
+                }
+            }
+
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN FIND COACH BY NAME : " + e.getMessage());
+        }
+
+        return foundCoach;
+    }
+
     @Override
     public Coach save(Coach entity) {
         throw new UnsupportedOperationException("Not supported yet.");
