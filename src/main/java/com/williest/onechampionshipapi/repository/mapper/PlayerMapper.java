@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class PlayerMapper implements Function<ResultSet, Player> {
     private final CoachDAO coachDAO;
 
-    public Player applyWithoutClub(ResultSet rs){
+    public Player applyWithClubIdOnly(ResultSet rs){
         try{
             Player player = Player.builder().id((UUID) rs.getObject("player_id")).build();
             player.setName(rs.getString("player_name"));
@@ -27,6 +27,9 @@ public class PlayerMapper implements Function<ResultSet, Player> {
             player.setBirth_year(rs.getString("player_birth_year"));
             player.setPlayerPosition(PlayerPosition.valueOf(rs.getString("player_position")));
             player.setNationality(rs.getString("player_nationality"));
+
+            Club club = Club.builder().id((UUID) rs.getObject("club_id")).build();
+            player.setClub(club);
 
             return player;
         } catch (SQLException e){
@@ -37,7 +40,7 @@ public class PlayerMapper implements Function<ResultSet, Player> {
     @Override
     public Player apply(ResultSet rs) {
         try {
-            Player player = this.applyWithoutClub(rs);
+            Player player = this.applyWithClubIdOnly(rs);
 
             Club club = Club.builder().id((UUID) (rs.getObject("club_id"))).build();
             club.setName(rs.getString("club_name"));

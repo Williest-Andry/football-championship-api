@@ -61,7 +61,7 @@ public class PlayerDAO implements EntityDAO<Player> {
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             try(ResultSet rs = select.executeQuery();){
                 while(rs.next()){
-                    Player player = this.playerMapper.applyWithoutClub(rs);
+                    Player player = this.playerMapper.applyWithClubIdOnly(rs);
                     players.add(player);
                 }
             }
@@ -81,7 +81,7 @@ public class PlayerDAO implements EntityDAO<Player> {
             select.setObject(1, clubId);
             try(ResultSet rs = select.executeQuery();){
                 while(rs.next()){
-                    Player player = this.playerMapper.applyWithoutClub(rs);
+                    Player player = this.playerMapper.applyWithClubIdOnly(rs);
                     players.add(player);
                 }
             }
@@ -102,7 +102,7 @@ public class PlayerDAO implements EntityDAO<Player> {
             select.setObject(1, id);
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()){
-                    foundPlayer = this.playerMapper.applyWithoutClub(rs);
+                    foundPlayer = this.playerMapper.applyWithClubIdOnly(rs);
                 }
             }
         } catch(SQLException e){

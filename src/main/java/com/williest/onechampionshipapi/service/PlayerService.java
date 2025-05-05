@@ -57,8 +57,14 @@ public class PlayerService implements EntityService<Player> {
     }
 
     @Override
-    public Player getById(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Player getById(String id) {
+        UUID validPlayerId = IdVerification.validUUID(id);
+        Player foundPlayer = this.playerDAO.findById(validPlayerId);
+        if(foundPlayer == null){
+            throw new ClientException("Player with id : " + id + " not found");
+        }
+
+        return foundPlayer;
     }
 
     @Override
@@ -72,25 +78,21 @@ public class PlayerService implements EntityService<Player> {
     }
 
     public PlayerStatistics getPlayerStatistics(String playerId, int seasonYear){
-        UUID validPlayerId = IdVerification.validUUID(playerId);
-        Player foundPlayer = this.playerDAO.findById(validPlayerId);
-        if(foundPlayer == null){
-            throw new ClientException("Player with id : " + playerId + " not found");
-        }
+        Player foundPlayer = this.getById(playerId);
 
         String validSeasonYear = String.valueOf(seasonYear);
         if(validSeasonYear.length() != 4){
             throw new ClientException("The season year should be 4 digits");
         }
 
-        return this.playerStatisticsDAO.findByPlayerIdAndSeasonYear(validPlayerId, seasonYear);
+        return this.playerStatisticsDAO.findByPlayerIdAndSeasonYear(foundPlayer.getId(), seasonYear);
     }
 
     public List<Player> getClubPlayersByClubId(String clubId){
         UUID validClubId = IdVerification.validUUID(clubId);
         Club foundClub = this.clubDAO.findById(validClubId);
         if(foundClub == null){
-            throw new ClientException("The club with id : " + clubId + " does exist");
+            throw new ClientException("The club with id : " + clubId + " does not exist");
         }
 
         return this.playerDAO.findAllByClubId(validClubId);

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Service
 public interface EntityService<T>{
-    T getById(UUID id);
+    T getById(String id);
 
     T save(T entity);
 

@@ -20,4 +20,16 @@ public class Club {
     private List<ClubStatistics> clubStatistics;
     private List<Player> players;
     private Ranking ranking;
+
+    public void setPlayers(List<Player> players) {
+        players.forEach(player -> player.setClub(this));
+        this.players = players;
+    }
+
+    public void addPlayers(List<Player> players) {
+        players.forEach(player -> {
+            this.players.add(player);
+            player.setClub(this);
+        });
+    }
 }

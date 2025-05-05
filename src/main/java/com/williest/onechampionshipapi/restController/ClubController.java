@@ -6,6 +6,7 @@ import com.williest.onechampionshipapi.restController.createRestEntity.CreatePla
 import com.williest.onechampionshipapi.restController.mapper.ClubRestMapper;
 import com.williest.onechampionshipapi.restController.mapper.PlayerRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.ClubRest;
+import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
 import com.williest.onechampionshipapi.restController.restEntity.SavedPlayerRest;
 import com.williest.onechampionshipapi.service.ClubService;
 import com.williest.onechampionshipapi.service.PlayerService;
@@ -58,6 +59,23 @@ public class ClubController {
             List<Player> clubPlayers = this.playerService.getClubPlayersByClubId(id);
             List<SavedPlayerRest> clubPlayersRest = clubPlayers.stream().map(this.playerRestMapper::applyWithoutClub).toList();
             return ResponseEntity.ok().body(clubPlayersRest);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/clubs/{id}/players")
+    public ResponseEntity<Object> updateClubPlayers(@PathVariable String id, @RequestBody List<CreatePlayer> playersToUpdate){
+        try{
+            List<Player> players = playersToUpdate.stream().map(this.playerRestMapper::toModel).toList();
+            List<Player> updatedPlayers = this.clubService.updateClubPlayers(id, players);
+            List<SavedPlayerRest> updatedPlayersRest = updatedPlayers.stream().map(this.playerRestMapper::applyWithoutClub)
+                    .toList();
+            return ResponseEntity.ok().body(updatedPlayersRest);
         } catch(ServerException e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch(ClientException e) {

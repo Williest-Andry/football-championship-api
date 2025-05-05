@@ -22,7 +22,7 @@ public class SeasonService implements EntityService<Season> {
     }
 
     @Override
-    public Season getById(UUID id) {
+    public Season getById(String id) {
         return null;
     }
 
