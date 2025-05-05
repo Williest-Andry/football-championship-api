@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class Player {
     @Builder.Default
-    private UUID id = UUID.randomUUID();
+    private final UUID id = UUID.randomUUID();
     private String name;
     private int number;
     private String nationality;

@@ -60,9 +60,6 @@ public class PlayerService implements EntityService<Player> {
 
     @Override
     public Player save(Player player) {
-        if(player.getId() == null){
-            player.setId(UUID.randomUUID());
-        }
         return this.playerDAO.save(player);
     }
 

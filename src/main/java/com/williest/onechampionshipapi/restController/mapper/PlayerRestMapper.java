@@ -55,7 +55,7 @@ public class PlayerRestMapper implements Function<Player, PlayerRest> {
             throw new ClientException("The player format is incorrect");
         }
 
-        UUID createPlayerId = IdVerification.validUUID(createPlayer.getId());
+        UUID createPlayerId = IdVerification.validOrGenerateUUID(createPlayer.getId());
 
         return Player.builder()
                 .id(createPlayerId)
