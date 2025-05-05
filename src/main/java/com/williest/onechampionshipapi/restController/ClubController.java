@@ -6,6 +6,7 @@ import com.williest.onechampionshipapi.restController.createRestEntity.CreatePla
 import com.williest.onechampionshipapi.restController.mapper.ClubRestMapper;
 import com.williest.onechampionshipapi.restController.mapper.PlayerRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.ClubRest;
+import com.williest.onechampionshipapi.restController.restEntity.ClubRestWithStatistics;
 import com.williest.onechampionshipapi.restController.restEntity.PlayerRest;
 import com.williest.onechampionshipapi.restController.restEntity.SavedPlayerRest;
 import com.williest.onechampionshipapi.service.ClubService;
@@ -93,6 +94,21 @@ public class ClubController {
             List<SavedPlayerRest> updatedPlayersRest = addedPlayers.stream().map(this.playerRestMapper::applyWithoutClub)
                     .toList();
             return ResponseEntity.ok().body(updatedPlayersRest);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/clubs/statistics/{seasonYear}")
+    public ResponseEntity<Object> getAllClubsStatisticsInOneSeason(@PathVariable String seasonYear){
+        try{
+            List<Club> clubsWithStatistics = this.clubService.getAllClubsStatisticsBySeasonYear(seasonYear);
+            List<ClubRestWithStatistics> clubsStatistics = clubsWithStatistics.stream().map(this.)
+            return ResponseEntity.ok().body(clubsStatistics);
         } catch(ServerException e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch(ClientException e) {

@@ -29,18 +29,10 @@ CREATE TABLE coach(
     coach_nationality VARCHAR NOT NULL
 );
 
-CREATE TABLE ranking(
-    ranking_id UUID PRIMARY KEY,
-    league_id UUID REFERENCES league(league_id) NOT NULL,
-    rank INT UNIQUE NOT NULL,
-    points INT NOT NULL
-);
-
 CREATE TABLE club(
     club_id UUID PRIMARY KEY,
     league_id UUID REFERENCES league(league_id),
     coach_id UUID REFERENCES coach(coach_id) NOT NULL,
-    ranking_id UUID REFERENCES ranking(ranking_id),
     club_name VARCHAR UNIQUE NOT NULL,
     creation_year VARCHAR(4) NOT NULL,
     acronym VARCHAR(3) NOT NULL,
@@ -84,9 +76,7 @@ CREATE TABLE club_statistic(
     season_id UUID REFERENCES season(season_id) NOT NULL,
     match_id UUID REFERENCES match(match_id) NOT NULL,
     score_goals INT NOT NULL,
-    conceded_goals INT NOT NULL,
-    difference_goals INT NOT NULL,
-    clean_sheet_number INT NOT NULL
+    conceded_goals INT NOT NULL
 );
 
 CREATE TABLE goal (

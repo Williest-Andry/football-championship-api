@@ -1,22 +1,17 @@
 package com.williest.onechampionshipapi.restController.restEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.williest.onechampionshipapi.model.ClubStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-
 @Getter
 @AllArgsConstructor
-public class ClubRest {
+public class ClubRestWithStatistics {
     private final String id;
     private String name;
     private String creationYear;
     private String acronym;
     private String stadiumName;
     private CoachRest coach;
-
-    @JsonIgnore
-    public boolean isValid(){
-        return id != null && name != null && acronym != null && stadiumName != null && coach != null && coach.isValid();
-    }
+    private ClubStatistics clubStatistics;
 }

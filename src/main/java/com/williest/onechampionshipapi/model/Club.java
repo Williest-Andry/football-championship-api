@@ -17,9 +17,8 @@ public class Club {
     private String stadium;
     private League league;
     private Coach coach;
-    private List<ClubStatistics> clubStatistics;
+    private ClubStatistics clubStatistics;
     private List<Player> players;
-    private Ranking ranking;
 
     public void setPlayers(List<Player> players) {
         players.forEach(player -> player.setClub(this));

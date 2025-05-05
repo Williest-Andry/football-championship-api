@@ -50,14 +50,11 @@ INSERT INTO league_season (season_id, league_id) VALUES
 INSERT INTO coach (coach_id, coach_name, coach_nationality) VALUES
     ('a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 'Hansi Flick', 'Germany');
 
-INSERT INTO ranking (ranking_id, league_id, rank, points) VALUES
-    ('c1d2e3f4-a5b6-c7d8-e9f0-1a2b3c4d5e6f', 'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 2, 72);
 
 INSERT INTO club (
     club_id,
     league_id,
     coach_id,
-    ranking_id,
     club_name,
     creation_year,
     acronym,
@@ -66,7 +63,6 @@ INSERT INTO club (
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b',
              'a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-             'c1d2e3f4-a5b6-c7d8-e9f0-1a2b3c4d5e6f',
              'FC Barcelona',
              '1899',
              'FCB',
@@ -96,14 +92,10 @@ INSERT INTO player (
 INSERT INTO coach (coach_id, coach_name, coach_nationality) VALUES
     ('bbccddee-1234-5678-90ab-cdef12345678', 'Carlo Ancelotti', 'Italy');
 
-INSERT INTO ranking (ranking_id, league_id, rank, points) VALUES
-    ('99887766-5544-3322-1100-aabbccddeeff', 'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 1, 78);
-
 INSERT INTO club (
     club_id,
     league_id,
     coach_id,
-    ranking_id,
     club_name,
     creation_year,
     acronym,
@@ -112,7 +104,6 @@ INSERT INTO club (
              'fedcba98-7654-3210-bcde-9876543210ff',
              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b',
              'bbccddee-1234-5678-90ab-cdef12345678',
-             '99887766-5544-3322-1100-aabbccddeeff',
              'Real Madrid',
              '1902',
              'RMA',
@@ -249,18 +240,14 @@ INSERT INTO club_statistic (
     season_id,
     match_id,
     score_goals,
-    conceded_goals,
-    difference_goals,
-    clean_sheet_number
+    conceded_goals
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000001',
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
              'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
              2,
-             1,
-             1,
-             0
+             1
          );
 
 -- Real Madrid
@@ -270,18 +257,14 @@ INSERT INTO club_statistic (
     season_id,
     match_id,
     score_goals,
-    conceded_goals,
-    difference_goals,
-    clean_sheet_number
+    conceded_goals
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000002',
              'fedcba98-7654-3210-bcde-9876543210ff',
              'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
              'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
              1,
-             2,
-             -1,
-             0
+             2
          );
 
 -- Frenkie de Jong (FCB) — 0 but, 90 minutes

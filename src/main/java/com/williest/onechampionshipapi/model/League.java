@@ -18,5 +18,4 @@ public class League {
     private List<Club> clubs;
     private List<Match> allMatches;
     private Season season;
-    private List<Ranking> generalRanking;
 }

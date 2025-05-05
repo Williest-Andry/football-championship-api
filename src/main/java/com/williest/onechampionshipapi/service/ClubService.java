@@ -3,9 +3,11 @@ package com.williest.onechampionshipapi.service;
 import com.williest.onechampionshipapi.model.Club;
 import com.williest.onechampionshipapi.model.Coach;
 import com.williest.onechampionshipapi.model.Player;
+import com.williest.onechampionshipapi.model.Season;
 import com.williest.onechampionshipapi.repository.crudOperation.ClubDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.CoachDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
+import com.williest.onechampionshipapi.repository.crudOperation.SeasonDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class ClubService implements EntityService<Club> {
     private final CoachDAO coachDAO;
     private final PlayerDAO playerDAO;
     private final PlayerService playerService;
+    private final SeasonDAO seasonDAO;
 
     public List<Club> getAllClubs() {
         return this.clubDAO.findAll();
@@ -121,6 +124,23 @@ public class ClubService implements EntityService<Club> {
 
         Club savedClub = this.save(foundClub);
         return savedClub.getPlayers();
+    }
+
+    public List<Club> getAllClubsStatisticsBySeasonYear(String seasonYear){
+        if(seasonYear.length() != 4){
+            throw new ClientException("The season year should be 4 characters");
+        }
+        try{
+            Integer.parseInt(seasonYear);
+        } catch(Exception e){
+            throw new ClientException("The season year should be 4 digits");
+        }
+        Season foundSeason = this.seasonDAO.findByYear(seasonYear);
+        if(foundSeason == null){
+            throw new ClientException("The season with year : " + seasonYear + " does not exist");
+        }
+
+
     }
 
     @Override
