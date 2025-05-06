@@ -106,9 +106,10 @@ public class ClubController {
     }
 
     @GetMapping("/clubs/statistics/{seasonYear}")
-    public ResponseEntity<Object> getAllClubsStatisticsInOneSeason(@PathVariable String seasonYear){
+    public ResponseEntity<Object> getAllClubsStatisticsInOneSeason(@PathVariable String seasonYear,
+                                                                   @RequestParam(required = false) boolean hasToBeClassified){
         try{
-            List<Club> clubsWithStatistics = this.clubService.getAllClubsStatisticsBySeasonYear(seasonYear);
+            List<Club> clubsWithStatistics = this.clubService.getAllClubsStatisticsBySeasonYear(seasonYear, hasToBeClassified);
             List<ClubRestWithStatistics> clubsStatistics = clubsWithStatistics.stream()
                     .map(this.clubRestWithStatisticsMapper::apply).toList();
             return ResponseEntity.ok().body(clubsStatistics);

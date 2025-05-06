@@ -239,7 +239,7 @@ INSERT INTO club_statistic (
     club_id,
     season_id,
     match_id,
-    score_goals,
+    scored_goals,
     conceded_goals
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000001',
@@ -256,7 +256,7 @@ INSERT INTO club_statistic (
     club_id,
     season_id,
     match_id,
-    score_goals,
+    scored_goals,
     conceded_goals
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000002',

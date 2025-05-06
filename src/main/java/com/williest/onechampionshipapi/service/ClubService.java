@@ -2,13 +2,15 @@ package com.williest.onechampionshipapi.service;
 
 import com.williest.onechampionshipapi.model.*;
 import com.williest.onechampionshipapi.repository.crudOperation.*;
+import com.williest.onechampionshipapi.service.ClubStatisticsComparator.CleanSheetsComparator;
+import com.williest.onechampionshipapi.service.ClubStatisticsComparator.CompareList;
+import com.williest.onechampionshipapi.service.ClubStatisticsComparator.DifferenceGoalsComparator;
+import com.williest.onechampionshipapi.service.ClubStatisticsComparator.RankingComparator;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -121,7 +123,7 @@ public class ClubService implements EntityService<Club> {
         return savedClub.getPlayers();
     }
 
-    public List<Club> getAllClubsStatisticsBySeasonYear(String seasonYear){
+    public List<Club> getAllClubsStatisticsBySeasonYear(String seasonYear, boolean hasToBeClassified){
         if(seasonYear.length() != 4){
             throw new ClientException("The season year should be 4 characters");
         }
@@ -140,23 +142,46 @@ public class ClubService implements EntityService<Club> {
             club.setClubStatistics(this.clubStatisticsDAO.findAllByClubIdAndSeasonYear(club.getId(), seasonYear));
         });
 
-        List<Integer> clubVictories = new ArrayList<>();
-        List<Integer> clubDraws = new ArrayList<>();
+//        List<Integer> clubVictories = new ArrayList<>();
+//        List<Integer> clubDraws = new ArrayList<>();
+//
+//        clubs.forEach(club -> {
+//            club.getClubStatistics().forEach(clubStatistics -> {
+//                if(clubStatistics.getScoredGoals() > clubStatistics.getConcededGoals()){
+//                    clubVictories.add(1);
+//                }
+//                if(clubStatistics.getScoredGoals() == clubStatistics.getConcededGoals()){
+//                    clubDraws.add(1);
+//                }
+//
+//                Integer totalVictories = clubVictories.stream().map(victory -> victory * 3).reduce(0, Integer::sum);
+//                Integer totalDraws = clubDraws.stream().reduce(0, Integer::sum);
+//                clubStatistics.setRankingPoints(totalVictories + totalDraws);
+//            });
+//        });
 
-        clubs.forEach(club -> {
-            club.getClubStatistics().forEach(clubStatistics -> {
-                if(clubStatistics.getScoredGoals() > clubStatistics.getConcededGoals()){
-                    clubVictories.add(1);
-                }
-                if(clubStatistics.getScoredGoals() == clubStatistics.getConcededGoals()){
-                    clubDraws.add(1);
-                }
+        if(hasToBeClassified){
+            RankingComparator rankingComparator = new RankingComparator();
+            DifferenceGoalsComparator differenceGoalsComparator = new DifferenceGoalsComparator();
+            CleanSheetsComparator cleanSheetsComparator = new CleanSheetsComparator();
 
-                Integer totalVictories = clubVictories.stream().map(victory -> victory * 3).reduce(0, Integer::sum);
-                Integer totalDraws = clubDraws.stream().reduce(0, Integer::sum);
-                clubStatistics.setRankingPoints(totalVictories + totalDraws);
-            });
-        });
+            clubs.sort(rankingComparator);
+
+            List<Integer> clubsRankingPoints = clubs.stream()
+                    .map(club -> club.getGeneralClubStatistics().getRankingPoints()).toList();
+            boolean hasDuplicatesWithRanking = CompareList.hasDuplicates(clubsRankingPoints);
+            if(hasDuplicatesWithRanking){
+                clubs.sort(differenceGoalsComparator);
+
+                List<Integer> clubsDifferenceGoals = clubs.stream()
+                        .map(club -> club.getGeneralClubStatistics().getDifferenceGoals()).toList();
+                boolean hasDuplicatesWithDifference = CompareList.hasDuplicates(clubsRankingPoints);
+
+                if(hasDuplicatesWithDifference){
+                    clubs.sort(cleanSheetsComparator);
+                }
+            }
+        }
 
         return clubs;
     }

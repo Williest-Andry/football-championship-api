@@ -24,7 +24,8 @@ public class ClubDAO implements EntityDAO<Club>{
 
     public List<Club> findAll(){
         List<Club> clubs = new ArrayList<>();
-        sqlRequest = "SELECT club_id, coach_id, club_name, creation_year, acronym, stadium_name FROM club;";
+        sqlRequest = "SELECT club_id, coach_id, club_name, creation_year, acronym, stadium_name FROM club" +
+                " ORDER BY club_name ASC;";
 
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){

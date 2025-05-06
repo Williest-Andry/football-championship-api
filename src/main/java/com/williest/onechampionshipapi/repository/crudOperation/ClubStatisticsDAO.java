@@ -29,7 +29,7 @@ public class ClubStatisticsDAO implements EntityDAO<ClubStatistics> {
                 "COUNT(conceded_goals) FILTER (WHERE conceded_goals = 0) AS clean_sheets "+
                 "FROM club_statistic " +
                 "JOIN season ON season.season_id = club_statistic.season_id WHERE club_id = ? AND year = ? " +
-                "GROUP BY club_statistic_id, club_id, match_id, scored_goals, conceded_goals;";
+                "GROUP BY club_statistic_id, scored_goals, conceded_goals;";
         try(Connection dbConnection = dataSource.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, clubId);
