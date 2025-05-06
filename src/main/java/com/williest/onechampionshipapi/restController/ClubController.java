@@ -4,6 +4,7 @@ import com.williest.onechampionshipapi.model.Club;
 import com.williest.onechampionshipapi.model.Player;
 import com.williest.onechampionshipapi.restController.createRestEntity.CreatePlayer;
 import com.williest.onechampionshipapi.restController.mapper.ClubRestMapper;
+import com.williest.onechampionshipapi.restController.mapper.ClubRestWithStatisticsMapper;
 import com.williest.onechampionshipapi.restController.mapper.PlayerRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.ClubRest;
 import com.williest.onechampionshipapi.restController.restEntity.ClubRestWithStatistics;
@@ -28,6 +29,7 @@ public class ClubController {
     private final ClubRestMapper clubRestMapper;
     private final PlayerRestMapper playerRestMapper;
     private final PlayerService playerService;
+    private final ClubRestWithStatisticsMapper clubRestWithStatisticsMapper;
 
     @GetMapping("/clubs")
     public ResponseEntity<Object> getAllClubs(){
@@ -107,7 +109,8 @@ public class ClubController {
     public ResponseEntity<Object> getAllClubsStatisticsInOneSeason(@PathVariable String seasonYear){
         try{
             List<Club> clubsWithStatistics = this.clubService.getAllClubsStatisticsBySeasonYear(seasonYear);
-            List<ClubRestWithStatistics> clubsStatistics = clubsWithStatistics.stream().map(this.)
+            List<ClubRestWithStatistics> clubsStatistics = clubsWithStatistics.stream()
+                    .map(this.clubRestWithStatisticsMapper::apply).toList();
             return ResponseEntity.ok().body(clubsStatistics);
         } catch(ServerException e){
             return ResponseEntity.internalServerError().body(e.getMessage());

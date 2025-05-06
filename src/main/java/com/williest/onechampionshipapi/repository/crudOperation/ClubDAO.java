@@ -70,14 +70,14 @@ public class ClubDAO implements EntityDAO<Club>{
         sqlRequest = "INSERT INTO club(club_id, coach_id, club_name, creation_year, acronym, stadium_name) " +
                 "VALUES(?,?,?,?,?,?) RETURNING club_id;";
         try(Connection dbConnection = dataSourceDB.getConnection();
-            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
-            select.setObject(1, club.getId());
-            select.setObject(2, club.getCoach().getId());
-            select.setString(3, club.getName());
-            select.setString(4, club.getYearCreation());
-            select.setString(5, club.getAcronym());
-            select.setString(6, club.getStadium());
-            try(ResultSet rs = select.executeQuery()){
+            PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);){
+            insert.setObject(1, club.getId());
+            insert.setObject(2, club.getCoach().getId());
+            insert.setString(3, club.getName());
+            insert.setString(4, club.getYearCreation());
+            insert.setString(5, club.getAcronym());
+            insert.setString(6, club.getStadium());
+            try(ResultSet rs = insert.executeQuery()){
                 if(rs.next()){
                     savedClubId = ((UUID) rs.getObject("club_id"));
                 }

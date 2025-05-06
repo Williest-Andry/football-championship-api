@@ -36,8 +36,8 @@ public class ClubMapper implements Function<ResultSet, Club> {
             Coach coach = this.coachDAO.findById((UUID) rs.getObject("coach_id"));
             club.setCoach(coach);
 
-            List<ClubStatistics> clubStatistics = this.clubStatisticsDAO.findAllByClubId(club.getId());
-            club.setClubStatistics(clubStatistics);
+//            List<ClubStatistics> clubStatistics = this.clubStatisticsDAO.findAllByClubId(club.getId());
+//            club.setClubStatistics(clubStatistics);
 
             return club;
         } catch (SQLException e) {

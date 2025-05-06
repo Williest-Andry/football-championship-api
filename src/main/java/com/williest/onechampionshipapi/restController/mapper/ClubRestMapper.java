@@ -45,6 +45,6 @@ public class ClubRestMapper implements Function<Club, ClubRest> {
                 .acronym(clubRest.getAcronym())
                 .yearCreation(clubRest.getCreationYear())
                 .coach(coach)
-                .ranking(null).players(null).clubStatistics(null).league(null).build();
+                .players(null).clubStatistics(null).league(null).build();
     }
 }

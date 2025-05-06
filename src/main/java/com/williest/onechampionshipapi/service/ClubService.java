@@ -1,13 +1,7 @@
 package com.williest.onechampionshipapi.service;
 
-import com.williest.onechampionshipapi.model.Club;
-import com.williest.onechampionshipapi.model.Coach;
-import com.williest.onechampionshipapi.model.Player;
-import com.williest.onechampionshipapi.model.Season;
-import com.williest.onechampionshipapi.repository.crudOperation.ClubDAO;
-import com.williest.onechampionshipapi.repository.crudOperation.CoachDAO;
-import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
-import com.williest.onechampionshipapi.repository.crudOperation.SeasonDAO;
+import com.williest.onechampionshipapi.model.*;
+import com.williest.onechampionshipapi.repository.crudOperation.*;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +18,7 @@ public class ClubService implements EntityService<Club> {
     private final PlayerDAO playerDAO;
     private final PlayerService playerService;
     private final SeasonDAO seasonDAO;
+    private final ClubStatisticsDAO clubStatisticsDAO;
 
     public List<Club> getAllClubs() {
         return this.clubDAO.findAll();
@@ -140,7 +135,30 @@ public class ClubService implements EntityService<Club> {
             throw new ClientException("The season with year : " + seasonYear + " does not exist");
         }
 
+        List<Club> clubs = this.clubDAO.findAll();
+        clubs.forEach(club -> {
+            club.setClubStatistics(this.clubStatisticsDAO.findAllByClubIdAndSeasonYear(club.getId(), seasonYear));
+        });
 
+        List<Integer> clubVictories = new ArrayList<>();
+        List<Integer> clubDraws = new ArrayList<>();
+
+        clubs.forEach(club -> {
+            club.getClubStatistics().forEach(clubStatistics -> {
+                if(clubStatistics.getScoredGoals() > clubStatistics.getConcededGoals()){
+                    clubVictories.add(1);
+                }
+                if(clubStatistics.getScoredGoals() == clubStatistics.getConcededGoals()){
+                    clubDraws.add(1);
+                }
+
+                Integer totalVictories = clubVictories.stream().map(victory -> victory * 3).reduce(0, Integer::sum);
+                Integer totalDraws = clubDraws.stream().reduce(0, Integer::sum);
+                clubStatistics.setRankingPoints(totalVictories + totalDraws);
+            });
+        });
+
+        return clubs;
     }
 
     @Override
