@@ -10,4 +10,8 @@ import java.util.List;
 public class ClubScore {
     private int score;
     private List<Scorer> scorers;
+
+    public void addScorer(Scorer scorer) {
+        scorers.add(scorer);
+    }
 }

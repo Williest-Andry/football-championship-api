@@ -31,7 +31,7 @@ CREATE TABLE coach(
 
 CREATE TABLE club(
     club_id UUID PRIMARY KEY,
-    league_id UUID REFERENCES league(league_id),
+    league_id UUID REFERENCES league(league_id) NOT NULL,
     coach_id UUID REFERENCES coach(coach_id) NOT NULL,
     club_name VARCHAR UNIQUE NOT NULL,
     creation_year VARCHAR(4) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TYPE match_status AS ENUM ('NOT_STARTED','STARTED','FINISHED');
 CREATE TABLE match(
     match_id UUID PRIMARY KEY,
     league_id UUID REFERENCES league(league_id) NOT NULL,
-    match_date_time TIMESTAMP NOT NULL,
+    match_date_time TIMESTAMP,
     club_playing_home UUID REFERENCES club(club_id) NOT NULL,
     club_playing_away UUID REFERENCES club(club_id) NOT NULL,
     stadium VARCHAR NOT NULL,
@@ -83,6 +83,7 @@ CREATE TABLE goal (
     goal_id UUID PRIMARY KEY,
     club_id UUID REFERENCES club(club_id),
     player_id UUID REFERENCES player(player_id),
+    match_id UUID REFERENCES match(match_id),
     score INT NOT NULL,
     minute_of_goal INT NOT NULL,
     own_goal BOOLEAN NOT NULL

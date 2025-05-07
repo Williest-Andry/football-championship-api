@@ -3,8 +3,10 @@ package com.williest.onechampionshipapi.repository.mapper;
 import com.williest.onechampionshipapi.model.Club;
 import com.williest.onechampionshipapi.model.ClubStatistics;
 import com.williest.onechampionshipapi.model.Coach;
+import com.williest.onechampionshipapi.model.League;
 import com.williest.onechampionshipapi.repository.crudOperation.ClubStatisticsDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.CoachDAO;
+import com.williest.onechampionshipapi.repository.crudOperation.LeagueDAO;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,9 +23,12 @@ public class ClubMapper implements Function<ResultSet, Club> {
     private final CoachMapper coachMapper;
     private final CoachDAO coachDAO;
     private final ClubStatisticsDAO clubStatisticsDAO;
+    private final LeagueDAO leagueDAO;
 
     @Override
     public Club apply(ResultSet rs) {
+        League league = this.leagueDAO.findTheOneLeague();
+
         try {
             Club club = Club.builder()
                     .id((UUID) rs.getObject("club_id"))
@@ -32,12 +37,10 @@ public class ClubMapper implements Function<ResultSet, Club> {
                     .yearCreation(rs.getString("creation_year"))
                     .stadium(rs.getString("stadium_name")).build();
 
+            club.setLeague(league);
 
             Coach coach = this.coachDAO.findById((UUID) rs.getObject("coach_id"));
             club.setCoach(coach);
-
-//            List<ClubStatistics> clubStatistics = this.clubStatisticsDAO.findAllByClubId(club.getId());
-//            club.setClubStatistics(clubStatistics);
 
             return club;
         } catch (SQLException e) {

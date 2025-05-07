@@ -68,8 +68,8 @@ public class ClubDAO implements EntityDAO<Club>{
             return this.update(club);
         }
         UUID savedClubId = null;
-        sqlRequest = "INSERT INTO club(club_id, coach_id, club_name, creation_year, acronym, stadium_name) " +
-                "VALUES(?,?,?,?,?,?) RETURNING club_id;";
+        sqlRequest = "INSERT INTO club(club_id, coach_id, club_name, creation_year, acronym, stadium_name, league_id) " +
+                "VALUES(?,?,?,?,?,?,?) RETURNING club_id;";
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);){
             insert.setObject(1, club.getId());
@@ -78,6 +78,7 @@ public class ClubDAO implements EntityDAO<Club>{
             insert.setString(4, club.getYearCreation());
             insert.setString(5, club.getAcronym());
             insert.setString(6, club.getStadium());
+            insert.setObject(7, club.getLeague().getId());
             try(ResultSet rs = insert.executeQuery()){
                 if(rs.next()){
                     savedClubId = ((UUID) rs.getObject("club_id"));

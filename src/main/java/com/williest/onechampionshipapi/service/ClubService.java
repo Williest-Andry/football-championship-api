@@ -21,6 +21,7 @@ public class ClubService implements EntityService<Club> {
     private final PlayerService playerService;
     private final SeasonDAO seasonDAO;
     private final ClubStatisticsDAO clubStatisticsDAO;
+    private final LeagueDAO leagueDAO;
 
     public List<Club> getAllClubs() {
         return this.clubDAO.findAll();
@@ -41,23 +42,30 @@ public class ClubService implements EntityService<Club> {
 
     @Override
     public Club save(Club club) {
+        League league = this.leagueDAO.findTheOneLeague();
+        club.setLeague(league);
+
         Club savedClub = this.clubDAO.save(club);
 
         this.playerDAO.saveAll(club.getPlayers());
         List<Player> clubPlayers = this.playerDAO.findAllByClubId(savedClub.getId());
         savedClub.setPlayers(clubPlayers);
 
+
         return savedClub;
     }
 
     @Override
     public List<Club> saveAll(List<Club> clubs) {
+        League league = this.leagueDAO.findTheOneLeague();
+
         clubs.forEach(club ->{
             Coach coach = this.coachDAO.findByName(club.getCoach().getName());
             if(coach == null){
                 throw new ClientException("The coach with name : " + club.getCoach().getName() + " does not exist");
             }
             club.setCoach(coach);
+            club.setLeague(league);
         });
         return this.clubDAO.saveAll(clubs);
     }
@@ -142,24 +150,6 @@ public class ClubService implements EntityService<Club> {
             club.setClubStatistics(this.clubStatisticsDAO.findAllByClubIdAndSeasonYear(club.getId(), seasonYear));
         });
 
-//        List<Integer> clubVictories = new ArrayList<>();
-//        List<Integer> clubDraws = new ArrayList<>();
-//
-//        clubs.forEach(club -> {
-//            club.getClubStatistics().forEach(clubStatistics -> {
-//                if(clubStatistics.getScoredGoals() > clubStatistics.getConcededGoals()){
-//                    clubVictories.add(1);
-//                }
-//                if(clubStatistics.getScoredGoals() == clubStatistics.getConcededGoals()){
-//                    clubDraws.add(1);
-//                }
-//
-//                Integer totalVictories = clubVictories.stream().map(victory -> victory * 3).reduce(0, Integer::sum);
-//                Integer totalDraws = clubDraws.stream().reduce(0, Integer::sum);
-//                clubStatistics.setRankingPoints(totalVictories + totalDraws);
-//            });
-//        });
-
         if(hasToBeClassified){
             RankingComparator rankingComparator = new RankingComparator();
             DifferenceGoalsComparator differenceGoalsComparator = new DifferenceGoalsComparator();
@@ -175,7 +165,7 @@ public class ClubService implements EntityService<Club> {
 
                 List<Integer> clubsDifferenceGoals = clubs.stream()
                         .map(club -> club.getGeneralClubStatistics().getDifferenceGoals()).toList();
-                boolean hasDuplicatesWithDifference = CompareList.hasDuplicates(clubsRankingPoints);
+                boolean hasDuplicatesWithDifference = CompareList.hasDuplicates(clubsDifferenceGoals);
 
                 if(hasDuplicatesWithDifference){
                     clubs.sort(cleanSheetsComparator);

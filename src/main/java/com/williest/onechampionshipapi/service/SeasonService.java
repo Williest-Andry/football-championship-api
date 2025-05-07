@@ -21,6 +21,15 @@ public class SeasonService implements EntityService<Season> {
         return this.seasonDAO.findAll();
     }
 
+    public Season getByYear(String seasonYear){
+        Season foundSeason = this.seasonDAO.findByYear(seasonYear);
+        if(foundSeason == null){
+            throw new NotFoundException("Season with year : " + seasonYear + " not found");
+        }
+
+        return foundSeason;
+    }
+
     @Override
     public Season getById(String id) {
         return null;

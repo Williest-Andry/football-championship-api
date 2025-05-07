@@ -125,7 +125,7 @@ INSERT INTO match (
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'fedcba98-7654-3210-bcde-9876543210ff',
              'Lluís Companys',
-             'NOT_STARTED'
+             'FINISHED'
          );
 
 
@@ -325,14 +325,16 @@ INSERT INTO goal (
     player_id,
     score,
     minute_of_goal,
-    own_goal
+    own_goal,
+    match_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000001',
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'd8a1b69c-2499-4fd2-8d0c-28cfbd1f5ed0',
              1,
              34,
-             FALSE
+             FALSE,
+            'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
          );
 
 -- Gavi (FCB)
@@ -342,14 +344,16 @@ INSERT INTO goal (
     player_id,
     score,
     minute_of_goal,
-    own_goal
+    own_goal,
+    match_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000002',
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              '0f87f6e2-ae38-4983-9252-cd8b589f2a5b',
              1,
              52,
-             FALSE
+             FALSE,
+             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
          );
 
 -- Vinicius Junior (RMA)
@@ -359,12 +363,25 @@ INSERT INTO goal (
     player_id,
     score,
     minute_of_goal,
-    own_goal
+    own_goal,
+    match_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000003',
              'fedcba98-7654-3210-bcde-9876543210ff',
              '10000000-aaaa-bbbb-cccc-000000000001',
              1,
              76,
-             FALSE
+             FALSE,
+             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
+         );
+
+
+INSERT INTO coach (
+    coach_id,
+    coach_name,
+    coach_nationality
+) VALUES (
+             '8b1fc7d5-0b7d-4219-b3ce-4131ea550e78',
+             'Diego Simeone',
+             'Argentina'
          );
