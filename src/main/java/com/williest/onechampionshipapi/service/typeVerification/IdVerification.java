@@ -1,4 +1,4 @@
-package com.williest.onechampionshipapi.service;
+package com.williest.onechampionshipapi.service.typeVerification;
 
 import java.util.UUID;
 

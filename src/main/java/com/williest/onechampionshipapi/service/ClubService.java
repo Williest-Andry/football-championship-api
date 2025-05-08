@@ -7,6 +7,7 @@ import com.williest.onechampionshipapi.service.ClubStatisticsComparator.CompareL
 import com.williest.onechampionshipapi.service.ClubStatisticsComparator.DifferenceGoalsComparator;
 import com.williest.onechampionshipapi.service.ClubStatisticsComparator.RankingComparator;
 import com.williest.onechampionshipapi.service.exception.ClientException;
+import com.williest.onechampionshipapi.service.typeVerification.IdVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

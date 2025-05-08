@@ -12,13 +12,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class SeasonService implements EntityService<Season> {
     private final SeasonDAO seasonDAO;
     private final LeagueDAO leagueDAO;
+
+    public void isValidSeasonYear(String seasonYear){
+        if(seasonYear.length() != 4){
+            throw new ClientException("The season year should be 4 characters");
+        }
+        try{
+            Integer.parseInt(seasonYear);
+        } catch(Exception e){
+            throw new ClientException("The season year should be 4 digits");
+        }
+    }
 
     public List<Season> getAllSeasons() {
         return this.seasonDAO.findAll();

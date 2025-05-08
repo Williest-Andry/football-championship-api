@@ -4,7 +4,7 @@ import com.williest.onechampionshipapi.model.Club;
 import com.williest.onechampionshipapi.model.Coach;
 import com.williest.onechampionshipapi.restController.restEntity.ClubRest;
 import com.williest.onechampionshipapi.restController.restEntity.CoachRest;
-import com.williest.onechampionshipapi.service.IdVerification;
+import com.williest.onechampionshipapi.service.typeVerification.IdVerification;
 import com.williest.onechampionshipapi.service.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

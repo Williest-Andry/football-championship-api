@@ -10,9 +10,7 @@ import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +25,26 @@ public class MatchController {
         try{
             List<Match> allMatchInSeason = this.matchService.matchMakerForOneSeason(seasonYear);
             List<MatchRest> allMatchesRestInSeason = allMatchInSeason.stream().map(this.matchRestMapper::apply).toList();
+            return ResponseEntity.ok().body(allMatchesRestInSeason);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/matches/{seasonYear}")
+    public ResponseEntity<Object> getAllMatchesForOneSeason(@PathVariable String seasonYear,
+                                                            @RequestParam(required = false) String matchStatus,
+                                                            @RequestParam(required = false) String clubPlayingName,
+                                                            @RequestParam(required = false) String matchAfter,
+                                                            @RequestParam(required = false) String matchBeforeOrEquals) {
+        try{
+            List<Match> allMatchesInSeason = this.matchService.getAllMatchForOneSeason(seasonYear, matchStatus,
+                    clubPlayingName, matchAfter, matchBeforeOrEquals);
+            List<MatchRest> allMatchesRestInSeason = allMatchesInSeason.stream().map(this.matchRestMapper::apply).toList();
             return ResponseEntity.ok().body(allMatchesRestInSeason);
         } catch(ServerException e){
             return ResponseEntity.internalServerError().body(e.getMessage());

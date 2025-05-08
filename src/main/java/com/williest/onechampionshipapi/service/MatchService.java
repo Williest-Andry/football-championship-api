@@ -8,10 +8,12 @@ import com.williest.onechampionshipapi.model.enumeration.MatchStatus;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.crudOperation.MatchDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
+import com.williest.onechampionshipapi.service.typeVerification.StringVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -76,6 +78,38 @@ public class MatchService implements EntityService<Match> {
         }
 
         return generatedMatches;
+    }
+
+    public List<Match> getAllMatchForOneSeason(String seasonYear, String matchStatus,
+                                               String clubPlayingName,
+                                               String matchAfter, String matchBeforeOrEquals){
+        this.seasonService.isValidSeasonYear(seasonYear);
+
+        Season foundSeason = this.seasonService.getByYear(seasonYear);
+        if(foundSeason.getStatus() == SeasonStatus.NOT_STARTED){
+            throw new ClientException("Can't find all matches of the season with year : " +seasonYear+ " because its status "+
+                    "is : " + foundSeason.getStatus());
+        }
+
+        if(matchStatus != null){
+            try{
+                MatchStatus.valueOf(matchStatus);
+            } catch(Exception e){
+                throw new ClientException("Match status must be one of the following values: "
+                        + Arrays.toString(MatchStatus.values()));
+            }
+        }
+
+        if(matchAfter != null &&  !StringVerification.isValidDateString(matchAfter)){
+            throw new ClientException("The date of match after is invalid");
+        }
+
+        if(matchBeforeOrEquals != null &&  !StringVerification.isValidDateString(matchBeforeOrEquals)){
+            throw new ClientException("the date of match before or equals is invalid");
+        }
+
+        return this.matchDAO.findAllBySeasonYearWithConditions(seasonYear, matchStatus,
+                clubPlayingName, matchAfter, matchBeforeOrEquals);
     }
 
     @Override
