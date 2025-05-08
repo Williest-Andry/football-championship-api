@@ -23,6 +23,7 @@ public class ClubService implements EntityService<Club> {
     private final SeasonDAO seasonDAO;
     private final ClubStatisticsDAO clubStatisticsDAO;
     private final LeagueDAO leagueDAO;
+    private final SeasonService seasonService;
 
     public List<Club> getAllClubs() {
         return this.clubDAO.findAll();
@@ -133,14 +134,8 @@ public class ClubService implements EntityService<Club> {
     }
 
     public List<Club> getAllClubsStatisticsBySeasonYear(String seasonYear, boolean hasToBeClassified){
-        if(seasonYear.length() != 4){
-            throw new ClientException("The season year should be 4 characters");
-        }
-        try{
-            Integer.parseInt(seasonYear);
-        } catch(Exception e){
-            throw new ClientException("The season year should be 4 digits");
-        }
+        this.seasonService.isValidSeasonYear(seasonYear);
+
         Season foundSeason = this.seasonDAO.findByYear(seasonYear);
         if(foundSeason == null){
             throw new ClientException("The season with year : " + seasonYear + " does not exist");
@@ -159,13 +154,16 @@ public class ClubService implements EntityService<Club> {
             clubs.sort(rankingComparator);
 
             List<Integer> clubsRankingPoints = clubs.stream()
-                    .map(club -> club.getGeneralClubStatistics().getRankingPoints()).toList();
+                    .map(club -> club.getGeneralClubStatistics().getRankingPoints())
+                    .filter(point -> point != 0).toList();
             boolean hasDuplicatesWithRanking = CompareList.hasDuplicates(clubsRankingPoints);
+
             if(hasDuplicatesWithRanking){
                 clubs.sort(differenceGoalsComparator);
 
                 List<Integer> clubsDifferenceGoals = clubs.stream()
-                        .map(club -> club.getGeneralClubStatistics().getDifferenceGoals()).toList();
+                        .map(club -> club.getGeneralClubStatistics().getDifferenceGoals())
+                        .filter(difference -> difference != 0).toList();
                 boolean hasDuplicatesWithDifference = CompareList.hasDuplicates(clubsDifferenceGoals);
 
                 if(hasDuplicatesWithDifference){

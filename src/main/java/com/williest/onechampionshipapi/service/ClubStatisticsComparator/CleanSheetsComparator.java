@@ -10,6 +10,6 @@ public class CleanSheetsComparator implements Comparator<Club> {
         int club1Ranking = club1.getGeneralClubStatistics().getCleanSheetNumber();
         int club2Ranking = club2.getGeneralClubStatistics().getCleanSheetNumber();
 
-        return Integer.compare(club1Ranking, club2Ranking);
+        return Integer.compare(club2Ranking, club1Ranking);
     }
 }
