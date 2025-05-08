@@ -8,6 +8,7 @@ import com.williest.onechampionshipapi.model.enumeration.MatchStatus;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.crudOperation.MatchDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
+import com.williest.onechampionshipapi.service.typeVerification.IdVerification;
 import com.williest.onechampionshipapi.service.typeVerification.StringVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,14 +26,7 @@ public class MatchService implements EntityService<Match> {
     private final SeasonService seasonService;
 
     public List<Match> matchMakerForOneSeason(String seasonYear) {
-        if(seasonYear.length() != 4){
-            throw new ClientException("The season year should be 4 characters");
-        }
-        try{
-            Integer.parseInt(seasonYear);
-        } catch(Exception e){
-            throw new ClientException("The season year should be 4 digits");
-        }
+        this.seasonService.isValidSeasonYear(seasonYear);
 
         Season foundSeason = this.seasonService.getByYear(seasonYear);
         if(foundSeason.getStatus() != SeasonStatus.STARTED){
@@ -112,9 +107,24 @@ public class MatchService implements EntityService<Match> {
                 clubPlayingName, matchAfter, matchBeforeOrEquals);
     }
 
+    public Match updateMatchStatus(String matchId, MatchStatus matchStatus) {
+        Match foundMatch = this.getById(matchId);
+
+        foundMatch.updateActualStatus(matchStatus);
+
+        return this.matchDAO.save(foundMatch);
+    }
+
     @Override
     public Match getById(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        UUID validId = IdVerification.validUUID(id);
+
+        Match foundMatch = this.matchDAO.findById(validId);
+        if(foundMatch == null){
+            throw new ClientException("Match with id : " + id + " not found");
+        }
+
+        return foundMatch;
     }
 
     @Override

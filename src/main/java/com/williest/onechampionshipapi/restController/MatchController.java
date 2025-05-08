@@ -1,6 +1,7 @@
 package com.williest.onechampionshipapi.restController;
 
 import com.williest.onechampionshipapi.model.Match;
+import com.williest.onechampionshipapi.restController.createRestEntity.UpdateMatchStatus;
 import com.williest.onechampionshipapi.restController.mapper.MatchRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.MatchRest;
 import com.williest.onechampionshipapi.service.MatchService;
@@ -46,6 +47,21 @@ public class MatchController {
                     clubPlayingName, matchAfter, matchBeforeOrEquals);
             List<MatchRest> allMatchesRestInSeason = allMatchesInSeason.stream().map(this.matchRestMapper::apply).toList();
             return ResponseEntity.ok().body(allMatchesRestInSeason);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/matches/{id}/status")
+    public ResponseEntity<Object> updateMatchStatus(@PathVariable String id, @RequestBody UpdateMatchStatus status){
+        try{
+            Match updatedMatch = this.matchService.updateMatchStatus(id, status.getStatus());
+            MatchRest updatedMatchRest = this.matchRestMapper.apply(updatedMatch);
+            return ResponseEntity.ok().body(updatedMatchRest);
         } catch(ServerException e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         } catch(ClientException e){

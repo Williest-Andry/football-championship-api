@@ -126,6 +126,10 @@ public class MatchDAO implements EntityDAO<Match>{
 
     @Override
     public Match save(Match match) {
+        if(this.findById(match.getId()) != null){
+            return this.update(match);
+        }
+
         UUID savedMatchId = null;
         sqlRequest = "INSERT INTO match (match_id, league_id, match_date_time, club_playing_home, club_playing_away, stadium, actual_status, season_id) " +
                 " VALUES (?,?,?,?,?,?,?::match_status,?) RETURNING match_id;";
@@ -159,8 +163,18 @@ public class MatchDAO implements EntityDAO<Match>{
     }
 
     @Override
-    public Match update(Match entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Match update(Match match) {
+        sqlRequest = "UPDATE match SET actual_status = ?::match_status WHERE match_id = ?";
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement update = dbConnection.prepareStatement(sqlRequest);){
+            update.setString(1, match.getActualStatus().toString());
+            update.setObject(2, match.getId());
+            update.executeUpdate();
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN UPDATE MATCH : " + e.getMessage());
+        }
+
+        return this.findById(match.getId());
     }
 
     @Override
