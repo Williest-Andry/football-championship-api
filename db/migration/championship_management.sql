@@ -43,6 +43,7 @@ CREATE TYPE match_status AS ENUM ('NOT_STARTED','STARTED','FINISHED');
 CREATE TABLE match(
     match_id UUID PRIMARY KEY,
     league_id UUID REFERENCES league(league_id) NOT NULL,
+    season_id UUID REFERENCES season(season_id) NOT NULL,
     match_date_time TIMESTAMP,
     club_playing_home UUID REFERENCES club(club_id) NOT NULL,
     club_playing_away UUID REFERENCES club(club_id) NOT NULL,

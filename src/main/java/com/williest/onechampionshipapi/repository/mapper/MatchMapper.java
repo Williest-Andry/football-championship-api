@@ -49,6 +49,8 @@ public class MatchMapper implements Function<ResultSet, Match> {
             clubPlayingAway.setClub(clubAway);
             clubPlayingAway.setClubScore(totalClubAwayScores);
 
+            Season season = Season.builder().id((UUID) rs.getObject("season_id")).build();
+
             return Match.builder()
                     .id(matchId)
                     .clubPlayingHome(clubPlayingHome)
@@ -57,6 +59,7 @@ public class MatchMapper implements Function<ResultSet, Match> {
                     .matchDateTime(rs.getTimestamp("match_date_time") != null ?
                             rs.getTimestamp("match_date_time").toLocalDateTime() : null)
                     .actualStatus(MatchStatus.valueOf(rs.getString("actual_status")))
+                    .season(season)
                     .playerStatistics(null).clubStatistics(null).build();
         } catch (SQLException e) {
             throw new RuntimeException(e);

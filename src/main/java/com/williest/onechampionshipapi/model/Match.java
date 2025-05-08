@@ -18,6 +18,7 @@ public class Match {
     private String stadium;
     private LocalDateTime matchDateTime;
     private MatchStatus actualStatus;
+    private Season season;
     private League league;
     private List<PlayerStatistics> playerStatistics;
     private List<ClubStatistics> clubStatistics;

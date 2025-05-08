@@ -117,7 +117,8 @@ INSERT INTO match (
     club_playing_home,
     club_playing_away,
     stadium,
-    actual_status
+    actual_status,
+    season_id
 ) VALUES (
              'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b',
@@ -125,7 +126,8 @@ INSERT INTO match (
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'fedcba98-7654-3210-bcde-9876543210ff',
              'Lluís Companys',
-             'FINISHED'
+             'FINISHED',
+             'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b'
          );
 
 

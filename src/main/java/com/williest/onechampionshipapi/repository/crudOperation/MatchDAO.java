@@ -1,9 +1,7 @@
 package com.williest.onechampionshipapi.repository.crudOperation;
 
 import com.williest.onechampionshipapi.model.Match;
-import com.williest.onechampionshipapi.model.enumeration.MatchStatus;
 import com.williest.onechampionshipapi.repository.DataSourceDB;
-import com.williest.onechampionshipapi.repository.mapper.ClubMapper;
 import com.williest.onechampionshipapi.repository.mapper.MatchMapper;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +44,7 @@ public class MatchDAO implements EntityDAO<Match>{
     public List<Match> findAllBySeasonYear(String seasonYear){
         List<Match> foundMatches = new ArrayList<>();
         sqlRequest = "SELECT * FROM match " +
-                " INNER JOIN league ON league.league_id = match.league_id " +
-                "INNER JOIN league_season ON league.league_id = league_season.league_id " +
-                "INNER JOIN season ON season.season_id = league_season.season_id " +
+                "INNER JOIN season ON season.season_id = match.season_id " +
                 "WHERE year = ?;";
 
         try(Connection dbConnection = dataSource.getConnection();
@@ -90,7 +86,7 @@ public class MatchDAO implements EntityDAO<Match>{
     @Override
     public Match save(Match match) {
         UUID savedMatchId = null;
-        sqlRequest = "INSERT INTO match VALUES (?,?,?,?,?,?,?::match_status) RETURNING match_id;";
+        sqlRequest = "INSERT INTO match VALUES (?,?,?,?,?,?,?::match_status,?) RETURNING match_id;";
 
         try(Connection dbConnection = dataSource.getConnection();
             PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);){
@@ -99,8 +95,9 @@ public class MatchDAO implements EntityDAO<Match>{
             insert.setTimestamp(3, null);
             insert.setObject(4, match.getClubPlayingHome().getClub().getId());
             insert.setObject(5, match.getClubPlayingAway().getClub().getId());
-            insert.setString(6, match.getClubPlayingHome().getClub().getName());
+            insert.setString(6, match.getClubPlayingHome().getClub().getStadium());
             insert.setString(7, match.getActualStatus().toString());
+            insert.setObject(8, match.getSeason().getId());
             try(ResultSet rs = insert.executeQuery()){
                 if(rs.next()){
                     savedMatchId = (UUID) rs.getObject("match_id");

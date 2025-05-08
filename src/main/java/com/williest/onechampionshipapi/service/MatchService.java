@@ -8,7 +8,6 @@ import com.williest.onechampionshipapi.model.enumeration.MatchStatus;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.crudOperation.MatchDAO;
 import com.williest.onechampionshipapi.service.exception.ClientException;
-import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +66,8 @@ public class MatchService implements EntityService<Match> {
                             .clubPlayingAway(clubAway)
                             .stadium(clubHome.getClub().getStadium())
                             .matchDateTime(null)
-                            .actualStatus(MatchStatus.NOT_STARTED).build();
+                            .actualStatus(MatchStatus.NOT_STARTED)
+                            .season(foundSeason).build();
 
                     Match generatedNewMatch = this.matchDAO.save(newMatch);
                     generatedMatches.add(generatedNewMatch);

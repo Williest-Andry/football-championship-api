@@ -3,7 +3,6 @@ package com.williest.onechampionshipapi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.service.exception.ClientException;
-import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.*;
 
 import java.util.List;
