@@ -28,7 +28,7 @@ public class ClubScoreMapper implements Function<ResultSet, ClubScore> {
             );
 
             return new ClubScore(
-                    rs.getInt("total_score"),
+                    rs.getInt("score"),
                     List.of(scorer)
             );
         } catch (SQLException e) {

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,9 +30,12 @@ public class MatchMapper implements Function<ResultSet, Match> {
             MatchClub clubPlayingHome = new MatchClub();
             Club clubHome = this.clubDAO.findById((UUID) rs.getObject("club_playing_home"));
             List<ClubScore> clubHomeScores = this.clubScoreDAO.findByMatchIdAndClubId(clubHome.getId(), matchId);
-            List<Scorer> allClubHomeScorers = clubHomeScores.stream().map(ClubScore::getScorers).findAny().orElse(new ArrayList<>());
+            List<Scorer> allClubHomeScorers = clubHomeScores.stream()
+                    .flatMap(clubScore -> clubScore.getScorers().stream()).toList();
+            int totalScoreHome = !clubHomeScores.isEmpty() ?
+                    clubHomeScores.stream().map(ClubScore::getScore).reduce(Integer::sum).get() : 0;
             ClubScore totalClubHomeScores = new ClubScore(
-                    !clubHomeScores.isEmpty() ? clubHomeScores.getFirst().getScore() : 0,
+                    totalScoreHome,
                     allClubHomeScorers
             );
             clubPlayingHome.setClub(clubHome);
@@ -41,9 +45,12 @@ public class MatchMapper implements Function<ResultSet, Match> {
             MatchClub clubPlayingAway = new MatchClub();
             Club clubAway = this.clubDAO.findById((UUID) rs.getObject("club_playing_away"));
             List<ClubScore> clubAwayScores = this.clubScoreDAO.findByMatchIdAndClubId(clubAway.getId(), matchId);
-            List<Scorer> allClubAwayScorers = clubAwayScores.stream().map(ClubScore::getScorers).findAny().orElse(new ArrayList<>());
+            List<Scorer> allClubAwayScorers = clubAwayScores.stream()
+                    .flatMap(clubScore -> clubScore.getScorers().stream()).toList();
+            int totalScoreAway = !clubAwayScores.isEmpty() ?
+                    clubAwayScores.stream().map(ClubScore::getScore).reduce(Integer::sum).get() : 0;
             ClubScore totalClubAwayScores = new ClubScore(
-                    !clubAwayScores.isEmpty() ? clubAwayScores.getFirst().getScore() : 0,
+                    totalScoreAway,
                     allClubAwayScorers
             );
             clubPlayingAway.setClub(clubAway);

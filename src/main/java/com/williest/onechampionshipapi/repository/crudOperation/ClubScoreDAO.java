@@ -24,7 +24,7 @@ public class ClubScoreDAO implements EntityDAO<ClubScore>{
 
     public List<ClubScore> findByMatchIdAndClubId(UUID clubId, UUID matchId) {
         List<ClubScore> clubScores = new ArrayList<>();
-        sqlRequest = "SELECT *, SUM(score) AS total_score FROM goal WHERE club_id = ? AND match_id = ? " +
+        sqlRequest = "SELECT * FROM goal WHERE club_id = ? AND match_id = ? " +
                 "GROUP BY goal_id, club_id, player_id, minute_of_goal, own_goal, match_id;";
 
         try(Connection dbConnection = dataSource.getConnection();
