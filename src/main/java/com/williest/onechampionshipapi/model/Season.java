@@ -19,6 +19,8 @@ public class Season {
     @Getter(AccessLevel.NONE)
     private String alias;
     @JsonIgnore
+    private League league;
+    @JsonIgnore
     private List<ClubStatistics> clubStatistics;
     @JsonIgnore
     private List<PlayerStatistics> playerStatistics;

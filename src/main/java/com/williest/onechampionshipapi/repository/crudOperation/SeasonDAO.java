@@ -1,7 +1,6 @@
 package com.williest.onechampionshipapi.repository.crudOperation;
 
 import com.williest.onechampionshipapi.model.Season;
-import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.mapper.SeasonMapper;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
@@ -87,7 +86,8 @@ public class SeasonDAO implements EntityDAO<Season> {
             return this.update(season);
         }
         UUID savedSeasonId = null;
-        sqlRequest = "INSERT INTO season VALUES (?,?,?,?::season_status) RETURNING season_id;";
+        sqlRequest = "INSERT INTO season (season_id, year, alias, status, league_id) " +
+                "VALUES (?,?,?,?::season_status,?) RETURNING season_id;";
 
         try(Connection dbConnection = dataSource.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
@@ -95,6 +95,7 @@ public class SeasonDAO implements EntityDAO<Season> {
             select.setString(2, String.valueOf(season.getYear()));
             select.setString(3, season.getValidAlias());
             select.setString(4, season.getStatus().toString());
+            select.setObject(5, season.getLeague().getId());
             try(ResultSet rs = select.executeQuery()){
                 if(rs.next()){
                     savedSeasonId = (UUID) rs.getObject("season_id");

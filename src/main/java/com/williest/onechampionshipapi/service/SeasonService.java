@@ -1,7 +1,9 @@
 package com.williest.onechampionshipapi.service;
 
+import com.williest.onechampionshipapi.model.League;
 import com.williest.onechampionshipapi.model.Season;
 import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
+import com.williest.onechampionshipapi.repository.crudOperation.LeagueDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.SeasonDAO;
 import com.williest.onechampionshipapi.restController.createRestEntity.UpdateSeasonStatus;
 import com.williest.onechampionshipapi.service.exception.ClientException;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SeasonService implements EntityService<Season> {
     private final SeasonDAO seasonDAO;
+    private final LeagueDAO leagueDAO;
 
     public List<Season> getAllSeasons() {
         return this.seasonDAO.findAll();
@@ -32,7 +35,7 @@ public class SeasonService implements EntityService<Season> {
 
     @Override
     public Season getById(String id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
@@ -47,7 +50,11 @@ public class SeasonService implements EntityService<Season> {
             if (foundSeason != null) {
                 throw new ClientException("Season with year : " + season.getYear() + " already exists");
             }
+
             season.updateStatus(SeasonStatus.NOT_STARTED);
+
+            League theOneLeague = this.leagueDAO.findTheOneLeague();
+            season.setLeague(theOneLeague);
         });
         return seasonDAO.saveAll(seasons);
     }
@@ -65,6 +72,6 @@ public class SeasonService implements EntityService<Season> {
 
     @Override
     public Season delete(Season entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet");
     }
 }

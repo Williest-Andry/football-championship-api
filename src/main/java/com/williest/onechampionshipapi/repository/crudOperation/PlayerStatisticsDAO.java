@@ -76,26 +76,26 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
 
     @Override
     public PlayerStatistics findById(UUID id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
     public PlayerStatistics save(PlayerStatistics entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
     public List<PlayerStatistics> saveAll(List<PlayerStatistics> entities) {
-        return List.of();
+        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
     public PlayerStatistics update(PlayerStatistics entity) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
     public PlayerStatistics deleteById(UUID id) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet");
     }
 }

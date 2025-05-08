@@ -2,14 +2,6 @@ DROP DATABASE IF EXISTS championship_management;
 CREATE DATABASE championship_management;
 \c championship_management
 
-CREATE TYPE season_status AS ENUM ('NOT_STARTED', 'STARTED', 'FINISHED');
-CREATE TABLE season(
-    season_id UUID PRIMARY KEY,
-    year VARCHAR(4) UNIQUE NOT NULL,
-    alias VARCHAR(10) NOT NULL,
-    status season_status NOT NULL
-);
-
 CREATE TYPE league_country AS ENUM ('England', 'Spain', 'Germany', 'Italy', 'France');
 CREATE TYPE league_name AS ENUM('PREMIER_LEAGUE', 'LA_LIGA', 'BUNDESLIGA', 'SERIA_A', 'LIGUE_1');
 CREATE TABLE league(
@@ -18,9 +10,13 @@ CREATE TABLE league(
     country league_country NOT NULL
 );
 
-CREATE TABLE league_season(
-    season_id UUID REFERENCES season(season_id) NOT NULL,
-    league_id UUID REFERENCES league(league_id)
+CREATE TYPE season_status AS ENUM ('NOT_STARTED', 'STARTED', 'FINISHED');
+CREATE TABLE season(
+    season_id UUID PRIMARY KEY,
+    year VARCHAR(4) UNIQUE NOT NULL,
+    alias VARCHAR(10) NOT NULL,
+    status season_status NOT NULL,
+    league_id UUID REFERENCES league(league_id) NOT NULL
 );
 
 CREATE TABLE coach(

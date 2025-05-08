@@ -1,9 +1,13 @@
+INSERT INTO league (league_id, league_name, country) VALUES
+    ('d4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 'LA_LIGA', 'Spain');
+
 -- Saison 2024 (UUID fourni)
 INSERT INTO season VALUES (
                               'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
                               '2024',
                               'S2024-2025',
-                              'STARTED'
+                              'STARTED',
+                              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b'
                           );
 
 -- Saison 2023
@@ -11,7 +15,8 @@ INSERT INTO season VALUES (
                               'b32a1a52-0bcd-4d8b-89c1-f3d123456789',
                               '2023',
                               'S2023-2024',
-                              'FINISHED'
+                              'FINISHED',
+                              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b'
                           );
 
 -- Saison 2025
@@ -19,7 +24,8 @@ INSERT INTO season VALUES (
                               '0e72dce5-6e34-4919-8f6d-afe112233445',
                               '2025',
                               'S2025-2026',
-                              'NOT_STARTED'
+                              'NOT_STARTED',
+                              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b'
                           );
 
 -- Saison 2022
@@ -27,7 +33,8 @@ INSERT INTO season VALUES (
                               '5c8e37d9-fbd4-4e78-a5c4-dc3344556677',
                               '2022',
                               'S2022-2023',
-                              'FINISHED'
+                              'FINISHED',
+                              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b'
                           );
 
 -- Saison 2026
@@ -35,16 +42,9 @@ INSERT INTO season VALUES (
                               '9a1b2c3d-4e5f-6789-aaaa-bbccddeeff00',
                               '2026',
                               'S2026-2027',
-                              'NOT_STARTED'
+                              'NOT_STARTED',
+                              'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b'
                           );
-
-
-INSERT INTO league (league_id, league_name, country) VALUES
-    ('d4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b', 'LA_LIGA', 'Spain');
-
-INSERT INTO league_season (season_id, league_id) VALUES
-    ('e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b', 'd4a3f2e1-6b5c-4d7e-a8b9-0c1d2e3f4a5b');
-
 
 
 INSERT INTO coach (coach_id, coach_name, coach_nationality) VALUES

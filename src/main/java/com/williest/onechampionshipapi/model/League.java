@@ -17,5 +17,5 @@ public class League {
     private Country country;
     private List<Club> clubs;
     private List<Match> allMatches;
-    private Season season;
+    private List<Season> season;
 }

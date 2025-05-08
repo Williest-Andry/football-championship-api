@@ -86,7 +86,8 @@ public class MatchDAO implements EntityDAO<Match>{
     @Override
     public Match save(Match match) {
         UUID savedMatchId = null;
-        sqlRequest = "INSERT INTO match VALUES (?,?,?,?,?,?,?::match_status,?) RETURNING match_id;";
+        sqlRequest = "INSERT INTO match (match_id, league_id, match_date_time, club_playing_home, club_playing_away, stadium, actual_status, season_id) " +
+                " VALUES (?,?,?,?,?,?,?::match_status,?) RETURNING match_id;";
 
         try(Connection dbConnection = dataSource.getConnection();
             PreparedStatement insert = dbConnection.prepareStatement(sqlRequest);){
