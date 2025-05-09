@@ -1,8 +1,8 @@
 package com.williest.onechampionshipapi.service;
 
-import com.williest.onechampionshipapi.model.Club;
-import com.williest.onechampionshipapi.model.Player;
-import com.williest.onechampionshipapi.model.PlayerStatistics;
+import com.williest.onechampionshipapi.model.*;
+import com.williest.onechampionshipapi.model.enumeration.DurationUnit;
+import com.williest.onechampionshipapi.model.enumeration.SeasonStatus;
 import com.williest.onechampionshipapi.repository.crudOperation.ClubDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerStatisticsDAO;
@@ -20,6 +20,7 @@ public class PlayerService implements EntityService<Player> {
     private final PlayerDAO playerDAO;
     private final PlayerStatisticsDAO playerStatisticsDAO;
     private final ClubDAO clubDAO;
+    private final SeasonService seasonService;
 
     public List<Player> getAllPlayers(String playerName, Integer ageMinimum, Integer ageMaximum, String clubName) {
         if(playerName != null && playerName.isEmpty()) {
@@ -78,15 +79,26 @@ public class PlayerService implements EntityService<Player> {
         return entities.stream().map(this::save).toList();
     }
 
-    public PlayerStatistics getPlayerStatistics(String playerId, int seasonYear){
+    public PlayerStatistics getPlayerStatistics(String playerId, String seasonYear){
         Player foundPlayer = this.getById(playerId);
 
-        String validSeasonYear = String.valueOf(seasonYear);
-        if(validSeasonYear.length() != 4){
-            throw new ClientException("The season year should be 4 digits");
+        Season foundSeason = this.seasonService.getByYear(seasonYear);
+        if(foundSeason.getStatus() == SeasonStatus.NOT_STARTED){
+            throw new ClientException("The status of the season with year : "+ seasonYear + " is NOT_STARTED ");
         }
 
-        return this.playerStatisticsDAO.findByPlayerIdAndSeasonYear(foundPlayer.getId(), seasonYear);
+        PlayerStatistics foundPlayerStatistics = this.playerStatisticsDAO
+                .findByPlayerIdAndSeasonYear(foundPlayer.getId(), seasonYear);
+
+        return foundPlayerStatistics != null ? foundPlayerStatistics :
+                new PlayerStatistics(
+                        null,
+                        0,
+                        new PlayerPlayingTime(
+                                0.0,
+                                DurationUnit.SECOND
+                        )
+        );
     }
 
     public List<Player> getClubPlayersByClubId(String clubId){

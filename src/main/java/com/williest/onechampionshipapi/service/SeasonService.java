@@ -35,6 +35,8 @@ public class SeasonService implements EntityService<Season> {
     }
 
     public Season getByYear(String seasonYear){
+        this.isValidSeasonYear(seasonYear);
+
         Season foundSeason = this.seasonDAO.findByYear(seasonYear);
         if(foundSeason == null){
             throw new NotFoundException("Season with year : " + seasonYear + " not found");

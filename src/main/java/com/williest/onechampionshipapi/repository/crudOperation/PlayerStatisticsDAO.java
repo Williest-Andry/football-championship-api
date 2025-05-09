@@ -21,7 +21,7 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
     private String sqlRequest;
     private final PlayerStatisticsMapper playerStatisticsMapper;
 
-    public PlayerStatistics findByPlayerNoGoal(UUID playerId, int seasonYear){
+    public PlayerStatistics findByPlayerNoGoal(UUID playerId, String seasonYear){
         PlayerStatistics playerStatistics = null;
 
         sqlRequest = "SELECT player_statistic_id, SUM(playing_time_minute) AS total_time_playing" +
@@ -33,7 +33,7 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, playerId);
-            select.setInt(2, seasonYear);
+            select.setInt(2, Integer.parseInt(seasonYear));
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()) {
                     playerStatistics = this.playerStatisticsMapper.apply(rs);
@@ -46,7 +46,7 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
         return playerStatistics;
     }
 
-    public PlayerStatistics findByPlayerIdAndSeasonYear(UUID playerId, int seasonYear) {
+    public PlayerStatistics findByPlayerIdAndSeasonYear(UUID playerId, String seasonYear) {
         PlayerStatistics playerStatistics = null;
 
         sqlRequest = "SELECT player_statistic.player_statistic_id, COUNT(goal_id) AS total_goals, " +
@@ -60,7 +60,7 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, playerId);
-            select.setInt(2, seasonYear);
+            select.setInt(2, Integer.parseInt(seasonYear));
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()) {
                     playerStatistics = this.playerStatisticsMapper.apply(rs);

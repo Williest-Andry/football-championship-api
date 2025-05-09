@@ -59,7 +59,7 @@ public class PlayerController {
     }
 
     @GetMapping("/players/{id}/statistics/{seasonYear}")
-    public ResponseEntity<Object> getPlayerStatistics(@PathVariable String id, @PathVariable int seasonYear){
+    public ResponseEntity<Object> getPlayerStatistics(@PathVariable String id, @PathVariable String seasonYear){
         try{
             PlayerStatistics foundPlayerStatistic = this.playerService.getPlayerStatistics(id, seasonYear);
             return ResponseEntity.ok().body(foundPlayerStatistic);
