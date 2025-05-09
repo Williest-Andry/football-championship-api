@@ -104,6 +104,59 @@ public class MatchDAO implements EntityDAO<Match>{
         return foundMatches;
     }
 
+    public int findAllByClubIdAndSeasonYear(UUID clubId, String seasonYear){
+        int totalFoundMatches = 0;
+        sqlRequest = "SELECT COUNT(match_id) AS all_matches FROM match " +
+                "JOIN season ON season.season_id = match.season_id " +
+                "JOIN club ON club.club_id = match.club_playing_home OR club.club_id =match.club_playing_home " +
+                "WHERE year = ? AND club.club_id = ?;";
+
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setString(1, seasonYear);
+            select.setObject(2, clubId);
+            try(ResultSet rs = select.executeQuery()){
+                while(rs.next()){
+                    totalFoundMatches = rs.getInt("all_matches");
+                }
+            }
+        } catch(SQLException e) {
+            throw new ServerException("ERROR IN FIND ALL MATCHES BY CLUB ID AND SEASON YEAR : " + e.getMessage());
+        }
+
+        return totalFoundMatches;
+    }
+
+    public int findAllWhenConcededGoalByClubIdAndSeasonYear(UUID clubId, String seasonYear){
+        int totalFoundMatches = 0;
+        sqlRequest = "SELECT match.match_id AS match_conceded_goals FROM club_statistic  " +
+                "JOIN goal ON goal.club_statistic_id =  club_statistic. club_statistic_id " +
+                "JOIN match ON match.match_id = goal.match_id "+
+                "JOIN season ON season.season_id = match.season_id " +
+                "JOIN club ON club.club_id = match.club_playing_home OR club.club_id = match.club_playing_home " +
+                "WHERE year = ? " +
+                "AND club_statistic.club_id != ? AND (club_playing_home = ? OR club_playing_away = ?) " +
+                "GROUP BY match.match_id;";
+
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setString(1, seasonYear);
+            select.setObject(2, clubId);
+            select.setObject(3, clubId);
+            select.setObject(4, clubId);
+            try(ResultSet rs = select.executeQuery()){
+                while(rs.next()){
+                    totalFoundMatches = rs.getRow();
+                }
+            }
+        } catch(SQLException e) {
+            throw new ServerException("ERROR IN FIND ALL MATCHES WHEN CONCEDED GOAL BY CLUB ID AND SEASON YEAR : "
+                    + e.getMessage());
+        }
+
+        return totalFoundMatches;
+    }
+
     @Override
     public Match findById(UUID id) {
         Match foundMatch = null;
@@ -131,7 +184,8 @@ public class MatchDAO implements EntityDAO<Match>{
         }
 
         UUID savedMatchId = null;
-        sqlRequest = "INSERT INTO match (match_id, league_id, match_date_time, club_playing_home, club_playing_away, stadium, actual_status, season_id) " +
+        sqlRequest = "INSERT INTO match (match_id, league_id, match_date_time, club_playing_home," +
+                " club_playing_away, stadium, actual_status, season_id) " +
                 " VALUES (?,?,?,?,?,?,?::match_status,?) RETURNING match_id;";
 
         try(Connection dbConnection = dataSource.getConnection();

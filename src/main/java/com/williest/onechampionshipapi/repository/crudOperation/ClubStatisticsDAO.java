@@ -21,24 +21,35 @@ public class ClubStatisticsDAO implements EntityDAO<ClubStatistics> {
     private final DataSourceDB dataSource;
     private String sqlRequest;
     private final ClubStatisticsMapper clubStatisticsMapper;
+    private final MatchDAO matchDAO;
 
     public List<ClubStatistics> findAllByClubIdAndSeasonYear(UUID clubId, String seasonYear) {
         List<ClubStatistics> foundClubStatistics = new ArrayList<>();
-        sqlRequest = "SELECT club_statistic_id, scored_goals, conceded_goals, " +
-                "SUM(scored_goals - conceded_goals) AS difference_goals, " +
-                "COUNT(conceded_goals) FILTER (WHERE conceded_goals = 0) AS clean_sheets "+
+        sqlRequest = "SELECT club_statistic.club_statistic_id, " +
+                "COUNT(goal_id) AS scored_goals " +
                 "FROM club_statistic " +
                 "JOIN match ON match.match_id = club_statistic.match_id " +
                 "JOIN season ON season.season_id = club_statistic.season_id " +
-                "WHERE club_id = ? AND year = ? AND match.actual_status ='FINISHED' " +
-                "GROUP BY club_statistic_id, scored_goals, conceded_goals;";
+                "JOIN goal ON goal.club_statistic_id = club_statistic.club_statistic_id " +
+                "WHERE club_statistic.club_id = ? AND year = ? AND match.actual_status ='FINISHED' " +
+                "GROUP BY club_statistic.club_statistic_id;";
         try(Connection dbConnection = dataSource.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, clubId);
             select.setString(2, seasonYear);
             try(ResultSet rs = select.executeQuery()){
                 while(rs.next()){
-                    ClubStatistics clubStatistics = this.clubStatisticsMapper.apply(rs);
+                    int concededGoalsRs = this.findConcededGoalByClubIdAndSeasonYear(clubId, seasonYear);
+
+                    int matchesWhenConcededGoalsRs = this.matchDAO
+                            .findAllWhenConcededGoalByClubIdAndSeasonYear(clubId, seasonYear);
+
+                    int allMatchesOfTheClub = this.matchDAO
+                            .findAllByClubIdAndSeasonYear(clubId, seasonYear);
+
+                    ClubStatistics clubStatistics = this.clubStatisticsMapper.applyWithAllStats(rs,
+                            concededGoalsRs, matchesWhenConcededGoalsRs,
+                            allMatchesOfTheClub);
                     foundClubStatistics.add(clubStatistics);
                 }
             }
@@ -47,6 +58,33 @@ public class ClubStatisticsDAO implements EntityDAO<ClubStatistics> {
         }
 
         return foundClubStatistics;
+    }
+
+    public int findConcededGoalByClubIdAndSeasonYear(UUID clubId, String seasonYear) {
+        int concededGoals = 0;
+        sqlRequest = "SELECT COUNT(goal_id) AS conceded_goals FROM club_statistic " +
+                "JOIN match ON match.match_id = club_statistic.match_id " +
+                "JOIN season ON season.season_id = club_statistic.season_id " +
+                "JOIN goal ON goal.club_statistic_id = club_statistic.club_statistic_id "+
+                "WHERE club_statistic.club_id != ? AND year = ? AND match.actual_status ='FINISHED' " +
+                "AND (club_playing_home = ? OR club_playing_away = ?);";
+        try(Connection dbConnection = dataSource.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, clubId);
+            select.setString(2, seasonYear);
+            select.setObject(3, clubId);
+            select.setObject(4, clubId);
+            try(ResultSet rs = select.executeQuery()){
+                while(rs.next()){
+                    concededGoals = rs.getInt("conceded_goals");
+                }
+            }
+        } catch(SQLException e) {
+            throw new ServerException("ERROR IN FIND ALL CONCEDED GOALS BY CLUB ID AND SEASON YEAR : "
+                    + e.getMessage());
+        }
+
+        return concededGoals;
     }
 
     @Override

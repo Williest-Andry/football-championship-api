@@ -49,13 +49,14 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
     public PlayerStatistics findByPlayerIdAndSeasonYear(UUID playerId, int seasonYear) {
         PlayerStatistics playerStatistics = null;
 
-        sqlRequest = "SELECT player_statistic_id, SUM(scored_goals) AS total_goals, SUM(playing_time_minute) AS total_time_playing" +
+        sqlRequest = "SELECT player_statistic.player_statistic_id, COUNT(goal_id) AS total_goals, " +
+                "SUM(playing_time_minute) AS total_time_playing" +
                 " FROM player_statistic " +
                 " INNER JOIN player ON player.player_id = player_statistic.player_id" +
                 " INNER JOIN goal ON goal.player_id = player.player_id " +
                 " INNER JOIN season ON season.season_id = player_statistic.season_id " +
                 " WHERE player_statistic.player_id = ? AND season.year = ?::varchar AND own_goal = false " +
-                "GROUP BY player_statistic_id ;";
+                "GROUP BY player_statistic.player_statistic_id ;";
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, playerId);

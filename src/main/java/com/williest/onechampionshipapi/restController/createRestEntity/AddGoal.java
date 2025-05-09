@@ -1,4 +1,4 @@
-package com.williest.onechampionshipapi.model;
+package com.williest.onechampionshipapi.restController.createRestEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -18,13 +18,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LeagueDAO {
     private final DataSourceDB dataSource;
-    private final String sqlRequest = "SELECT * FROM league";
 
     public League findTheOneLeague() {
         League league = null;
 
+        String sqlRequest = "SELECT * FROM league";
         try(Connection dbConnection = dataSource.getConnection();
-            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest)){
             try(ResultSet rs = select.executeQuery()){
                 if(rs.next()){
                     league = League.builder()

@@ -63,7 +63,6 @@ CREATE TABLE player_statistic(
     player_id UUID REFERENCES player(player_id) NOT NULL,
     season_id UUID REFERENCES season(season_id) NOT NULL,
     match_id UUID REFERENCES match(match_id) NOT NULL,
-    scored_goals INT NOT NULL,
     playing_time_minute DECIMAL NOT NULL
 );
 
@@ -71,9 +70,7 @@ CREATE TABLE club_statistic(
     club_statistic_id UUID PRIMARY KEY,
     club_id UUID REFERENCES club(club_id),
     season_id UUID REFERENCES season(season_id) NOT NULL,
-    match_id UUID REFERENCES match(match_id) NOT NULL,
-    score_goals INT NOT NULL,
-    conceded_goals INT NOT NULL
+    match_id UUID REFERENCES match(match_id) NOT NULL
 );
 
 CREATE TABLE goal (
@@ -81,7 +78,6 @@ CREATE TABLE goal (
     club_id UUID REFERENCES club(club_id),
     player_id UUID REFERENCES player(player_id),
     match_id UUID REFERENCES match(match_id),
-    score INT NOT NULL,
     minute_of_goal INT NOT NULL,
     own_goal BOOLEAN NOT NULL
 );

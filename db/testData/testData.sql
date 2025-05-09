@@ -191,7 +191,6 @@ INSERT INTO player_statistic (
     player_id,
     season_id,
     match_id,
-    scored_goals,
     playing_time_minute
 ) VALUES
 -- Robert Lewandowski (1 but, 90 minutes)
@@ -199,7 +198,6 @@ INSERT INTO player_statistic (
  'd8a1b69c-2499-4fd2-8d0c-28cfbd1f5ed0',
  'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
  'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
- 1,
  90.0),
 
 -- Gavi (1 but, 85 minutes)
@@ -207,7 +205,6 @@ INSERT INTO player_statistic (
  '0f87f6e2-ae38-4983-9252-cd8b589f2a5b',
  'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
  'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
- 1,
  85.0),
 
 -- Pedri (0 but, 88 minutes)
@@ -215,7 +212,6 @@ INSERT INTO player_statistic (
  'e3c8d9d1-f2ac-4a6e-90db-0a561827b389',
  'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
  'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
- 0,
  88.0),
 
 -- Vinicius Junior (1 but, 90 minutes)
@@ -223,7 +219,6 @@ INSERT INTO player_statistic (
  '10000000-aaaa-bbbb-cccc-000000000001',
  'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
  'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
- 1,
  90.0),
 
 -- Jude Bellingham (0 but, 87 minutes)
@@ -231,7 +226,6 @@ INSERT INTO player_statistic (
  '10000000-aaaa-bbbb-cccc-000000000002',
  'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
  'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
- 0,
  87.0);
 
 
@@ -240,16 +234,12 @@ INSERT INTO club_statistic (
     club_statistic_id,
     club_id,
     season_id,
-    match_id,
-    scored_goals,
-    conceded_goals
+    match_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000001',
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
-             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-             2,
-             1
+             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
          );
 
 -- Real Madrid
@@ -257,16 +247,12 @@ INSERT INTO club_statistic (
     club_statistic_id,
     club_id,
     season_id,
-    match_id,
-    scored_goals,
-    conceded_goals
+    match_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000002',
              'fedcba98-7654-3210-bcde-9876543210ff',
              'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
-             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-             1,
-             2
+             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
          );
 
 -- Frenkie de Jong (FCB) — 0 but, 90 minutes
@@ -275,7 +261,6 @@ INSERT INTO player_statistic VALUES (
                                         'c59de13d-e70b-44d0-8d93-45e51d9c5fa3',
                                         'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
                                         'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-                                        0,
                                         90.0
                                     );
 
@@ -285,7 +270,6 @@ INSERT INTO player_statistic VALUES (
                                         'a7d436e8-0af5-4f11-a1f6-0e6b0e4ff1aa',
                                         'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
                                         'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-                                        0,
                                         90.0
                                     );
 
@@ -295,7 +279,6 @@ INSERT INTO player_statistic VALUES (
                                         '10000000-aaaa-bbbb-cccc-000000000003',
                                         'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
                                         'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-                                        0,
                                         65.0
                                     );
 
@@ -305,7 +288,6 @@ INSERT INTO player_statistic VALUES (
                                         '10000000-aaaa-bbbb-cccc-000000000004',
                                         'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
                                         'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-                                        0,
                                         90.0
                                     );
 
@@ -315,7 +297,6 @@ INSERT INTO player_statistic VALUES (
                                         '10000000-aaaa-bbbb-cccc-000000000005',
                                         'e7f9c2b1-3d4a-47e8-9f3b-2c5d6e7f8a9b',
                                         'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
-                                        0,
                                         90.0
                                     );
 
@@ -325,18 +306,20 @@ INSERT INTO goal (
     goal_id,
     club_id,
     player_id,
-    score,
     minute_of_goal,
     own_goal,
-    match_id
+    match_id,
+    club_statistic_id,
+    player_statistic_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000001',
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              'd8a1b69c-2499-4fd2-8d0c-28cfbd1f5ed0',
-             1,
              34,
              FALSE,
-            'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
+            'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
+            '30000000-aaaa-bbbb-cccc-000000000001',
+            '20000000-aaaa-bbbb-cccc-000000000001'
          );
 
 -- Gavi (FCB)
@@ -344,18 +327,20 @@ INSERT INTO goal (
     goal_id,
     club_id,
     player_id,
-    score,
     minute_of_goal,
     own_goal,
-    match_id
+    match_id,
+    club_statistic_id,
+    player_statistic_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000002',
              'f1e2d3c4-b5a6-7890-1b2c-3d4e5f6a7b8c',
              '0f87f6e2-ae38-4983-9252-cd8b589f2a5b',
-             1,
              52,
              FALSE,
-             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
+             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
+            '30000000-aaaa-bbbb-cccc-000000000001',
+            '20000000-aaaa-bbbb-cccc-000000000002'
          );
 
 -- Vinicius Junior (RMA)
@@ -363,18 +348,20 @@ INSERT INTO goal (
     goal_id,
     club_id,
     player_id,
-    score,
     minute_of_goal,
     own_goal,
-    match_id
+    match_id,
+    club_statistic_id,
+    player_statistic_id
 ) VALUES (
              '30000000-aaaa-bbbb-cccc-000000000003',
              'fedcba98-7654-3210-bcde-9876543210ff',
              '10000000-aaaa-bbbb-cccc-000000000001',
-             1,
              76,
              FALSE,
-             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8'
+             'a9b8c7d6-e5f4-3210-b1c2-d3e4f5a6b7c8',
+             '30000000-aaaa-bbbb-cccc-000000000002',
+            '20000000-aaaa-bbbb-cccc-000000000004'
          );
 
 

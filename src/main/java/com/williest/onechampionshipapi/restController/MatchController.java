@@ -1,6 +1,8 @@
 package com.williest.onechampionshipapi.restController;
 
 import com.williest.onechampionshipapi.model.Match;
+import com.williest.onechampionshipapi.model.Scorer;
+import com.williest.onechampionshipapi.restController.createRestEntity.AddGoal;
 import com.williest.onechampionshipapi.restController.createRestEntity.UpdateMatchStatus;
 import com.williest.onechampionshipapi.restController.mapper.MatchRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.MatchRest;
@@ -70,4 +72,20 @@ public class MatchController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+//    @PostMapping("matches/{id}/goals")
+//    public ResponseEntity<Object> addGoalInMatches(@PathVariable String id, @RequestBody List<AddGoal> goalToAdd){
+//        try{
+//            List<Scorer> allScorers = goalToAdd.stream().map();
+//            List<Match> allUpdatedMatches = this.matchService.addGoalInMatches();
+//            List<MatchRest> allUpdatedMatchesRest = allUpdatedMatches.stream().map(this.matchRestMapper::apply).toList();
+//            return ResponseEntity.ok().body(allUpdatedMatchesRest);
+//        } catch(ServerException e){
+//            return ResponseEntity.internalServerError().body(e.getMessage());
+//        } catch(ClientException e){
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        } catch(NotFoundException e){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        }
+//    }
 }

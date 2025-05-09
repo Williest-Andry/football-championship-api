@@ -13,16 +13,13 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
 public class ClubMapper implements Function<ResultSet, Club> {
-    private final CoachMapper coachMapper;
     private final CoachDAO coachDAO;
-    private final ClubStatisticsDAO clubStatisticsDAO;
     private final LeagueDAO leagueDAO;
 
     @Override
