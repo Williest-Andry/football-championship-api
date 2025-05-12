@@ -135,11 +135,11 @@ public class MatchService implements EntityService<Match> {
         UUID clubAwayId = clubAway.getClubScore().getClub().getId();
 
         scorers.forEach(scorer -> {
-            UUID scorerId = scorer.getPlayer().getId();
-            scorer.setPlayer(this.playerService.getById(scorerId.toString()));
-
             UUID scorerClubId = scorer.getPlayer().getClub().getId();
             this.clubService.getById(scorerClubId.toString());
+
+            UUID scorerId = scorer.getPlayer().getId();
+            scorer.setPlayer(this.playerService.getById(scorerId.toString()));
 
             clubHome.getClubScore().setId(UUID.randomUUID());
             clubAway.getClubScore().setId(UUID.randomUUID());
@@ -160,9 +160,8 @@ public class MatchService implements EntityService<Match> {
             scorer.getPlayer().setPlayerStatistics(playerStatistic);
 
             if(scorerClubId.equals(clubHomeId)){
-                System.out.println("haha");
                 Player foundPlayer = clubHome.getClubScore().getClub().getPlayers().stream()
-                        .filter(player -> player.getId().equals(scorerId)).toList().getFirst();
+                        .filter(player -> player.getId().equals(scorerId)).findFirst().orElse(null);
                 if(foundPlayer == null){
                     scorer.setOwnGoal(true);
                 }
@@ -186,7 +185,7 @@ public class MatchService implements EntityService<Match> {
 
             if(scorerClubId.equals(clubAwayId)){
                 Player foundPlayer = foundMatch.getClubPlayingAway().getClubScore().getClub().getPlayers().stream()
-                        .filter(player -> player.getId().equals(scorerId)).toList().getFirst();
+                        .filter(player -> player.getId().equals(scorerId)).findFirst().orElse(null);
                 if(foundPlayer == null){
                     scorer.setOwnGoal(true);
                 }
