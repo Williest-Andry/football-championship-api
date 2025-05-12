@@ -19,9 +19,9 @@ public class MatchClubRestMapper implements Function<MatchClub, MatchClubRest> {
         List<ScorerRest> scorersRestList = matchClub.getClubScore().getScorers().stream().map(this.scorerRestMapper).toList();
 
         return new MatchClubRest(
-                matchClub.getClub().getId(),
-                matchClub.getClub().getName(),
-                matchClub.getClub().getAcronym(),
+                matchClub.getClubScore().getClub().getId(),
+                matchClub.getClubScore().getClub().getName(),
+                matchClub.getClubScore().getClub().getAcronym(),
                 matchClub.getClubScore().getScore(),
                 scorersRestList
         );

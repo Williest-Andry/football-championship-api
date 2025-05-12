@@ -1,5 +1,6 @@
 package com.williest.onechampionshipapi.repository.mapper;
 
+import com.williest.onechampionshipapi.model.Match;
 import com.williest.onechampionshipapi.model.PlayerPlayingTime;
 import com.williest.onechampionshipapi.model.PlayerStatistics;
 import com.williest.onechampionshipapi.model.enumeration.DurationUnit;
@@ -16,7 +17,7 @@ public class PlayerStatisticsMapper implements Function<ResultSet, PlayerStatist
     @Override
     public PlayerStatistics apply(ResultSet rs) {
         try{
-            double totalTimeMinute = rs.getDouble("total_time_playing");
+            double totalTimeMinute = rs.getDouble("playing_time_minute");
             double totalTimeSecond = totalTimeMinute * 60;
             PlayerPlayingTime totalTimePlaying = new PlayerPlayingTime(
                     totalTimeSecond,
@@ -30,11 +31,16 @@ public class PlayerStatisticsMapper implements Function<ResultSet, PlayerStatist
                 totalGoals = 0;
             }
 
-            return new PlayerStatistics(
+            Match match = Match.builder().id((UUID) rs.getObject("id_match")).build();
+
+            PlayerStatistics playerStatistics = new PlayerStatistics(
                     (UUID) rs.getObject("player_statistic_id"),
                     totalGoals,
                     totalTimePlaying
             );
+            playerStatistics.setMatch(match);
+
+            return playerStatistics;
         } catch(SQLException e){
             throw new ServerException("ERROR IN PLAYER STATISTICS MAPPER : " + e.getMessage());
         }

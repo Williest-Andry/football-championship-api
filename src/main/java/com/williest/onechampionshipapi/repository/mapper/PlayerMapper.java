@@ -5,6 +5,7 @@ import com.williest.onechampionshipapi.model.Coach;
 import com.williest.onechampionshipapi.model.Player;
 import com.williest.onechampionshipapi.model.enumeration.PlayerPosition;
 import com.williest.onechampionshipapi.repository.crudOperation.CoachDAO;
+import com.williest.onechampionshipapi.repository.crudOperation.PlayerStatisticsDAO;
 import com.williest.onechampionshipapi.service.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class PlayerMapper implements Function<ResultSet, Player> {
     private final CoachDAO coachDAO;
+    private final PlayerStatisticsDAO playerStatisticsDAO;
 
     public Player applyWithClubIdOnly(ResultSet rs){
         try{
@@ -30,6 +32,8 @@ public class PlayerMapper implements Function<ResultSet, Player> {
 
             Club club = Club.builder().id((UUID) rs.getObject("club_id")).build();
             player.setClub(club);
+
+            player.setPlayerStatistics(this.playerStatisticsDAO.findAllByPlayerId(player.getId()));
 
             return player;
         } catch (SQLException e){

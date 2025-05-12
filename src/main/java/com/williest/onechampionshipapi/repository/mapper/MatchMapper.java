@@ -9,11 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -35,11 +33,13 @@ public class MatchMapper implements Function<ResultSet, Match> {
             int totalScoreHome = !clubHomeScores.isEmpty() ?
                     clubHomeScores.stream().map(ClubScore::getScore).reduce(Integer::sum).get() : 0;
             ClubScore totalClubHomeScores = new ClubScore(
+                    null,
+                    clubHome,
                     totalScoreHome,
                     allClubHomeScorers
             );
-            clubPlayingHome.setClub(clubHome);
             clubPlayingHome.setClubScore(totalClubHomeScores);
+            clubPlayingHome.getClubScore().setClub(clubHome);
 
             // Club playing away
             MatchClub clubPlayingAway = new MatchClub();
@@ -50,11 +50,13 @@ public class MatchMapper implements Function<ResultSet, Match> {
             int totalScoreAway = !clubAwayScores.isEmpty() ?
                     clubAwayScores.stream().map(ClubScore::getScore).reduce(Integer::sum).get() : 0;
             ClubScore totalClubAwayScores = new ClubScore(
+                    null,
+                    clubAway,
                     totalScoreAway,
                     allClubAwayScorers
             );
-            clubPlayingAway.setClub(clubAway);
             clubPlayingAway.setClubScore(totalClubAwayScores);
+            clubPlayingAway.getClubScore().setClub(clubAway);
 
             Season season = Season.builder().id((UUID) rs.getObject("season_id")).build();
 

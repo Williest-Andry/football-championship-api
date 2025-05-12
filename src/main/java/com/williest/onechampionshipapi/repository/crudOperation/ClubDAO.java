@@ -45,7 +45,8 @@ public class ClubDAO implements EntityDAO<Club>{
     @Override
     public Club findById(UUID id) {
         Club foundClub = null;
-        sqlRequest = "SELECT club_id, coach_id, club_name, creation_year, acronym, stadium_name FROM club WHERE club_id = ?;";
+        sqlRequest = "SELECT club_id, coach_id, club_name, creation_year, acronym, stadium_name FROM club " +
+                "WHERE club_id = ?;";
 
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){

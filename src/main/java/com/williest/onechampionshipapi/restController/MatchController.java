@@ -5,6 +5,7 @@ import com.williest.onechampionshipapi.model.Scorer;
 import com.williest.onechampionshipapi.restController.createRestEntity.AddGoal;
 import com.williest.onechampionshipapi.restController.createRestEntity.UpdateMatchStatus;
 import com.williest.onechampionshipapi.restController.mapper.MatchRestMapper;
+import com.williest.onechampionshipapi.restController.mapper.ScorerRestMapper;
 import com.williest.onechampionshipapi.restController.restEntity.MatchRest;
 import com.williest.onechampionshipapi.service.MatchService;
 import com.williest.onechampionshipapi.service.exception.ClientException;
@@ -22,6 +23,7 @@ import java.util.List;
 public class MatchController {
     private final MatchService matchService;
     private final MatchRestMapper matchRestMapper;
+    private final ScorerRestMapper scorerRestMapper;
 
     @PostMapping("/matchMaker/{seasonYear}")
     public ResponseEntity<Object> matchMakerForOneSeason(@PathVariable String seasonYear) {
@@ -73,19 +75,19 @@ public class MatchController {
         }
     }
 
-//    @PostMapping("matches/{id}/goals")
-//    public ResponseEntity<Object> addGoalInMatches(@PathVariable String id, @RequestBody List<AddGoal> goalToAdd){
-//        try{
-//            List<Scorer> allScorers = goalToAdd.stream().map();
-//            List<Match> allUpdatedMatches = this.matchService.addGoalInMatches();
-//            List<MatchRest> allUpdatedMatchesRest = allUpdatedMatches.stream().map(this.matchRestMapper::apply).toList();
-//            return ResponseEntity.ok().body(allUpdatedMatchesRest);
-//        } catch(ServerException e){
-//            return ResponseEntity.internalServerError().body(e.getMessage());
-//        } catch(ClientException e){
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        } catch(NotFoundException e){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        }
-//    }
+    @PostMapping("matches/{id}/goals")
+    public ResponseEntity<Object> addGoalInMatches(@PathVariable String id, @RequestBody List<AddGoal> goalToAdd){
+        try{
+            List<Scorer> allScorers = goalToAdd.stream().map(this.scorerRestMapper::toModel).toList();
+            Match updatedMatch = this.matchService.addGoalInMatches(id, allScorers);
+            MatchRest allUpdatedMatchesRest = this.matchRestMapper.apply(updatedMatch);
+            return ResponseEntity.ok().body(allUpdatedMatchesRest);
+        } catch(ServerException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch(ClientException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

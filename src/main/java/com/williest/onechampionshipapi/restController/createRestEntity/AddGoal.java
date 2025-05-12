@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class AddGoal {
-    private UUID clubId;
+    private String clubId;
     private String scorerIdentifier;
     private int minuteOfGoal;
 }

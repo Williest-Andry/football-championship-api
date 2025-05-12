@@ -1,5 +1,6 @@
 package com.williest.onechampionshipapi.repository.mapper;
 
+import com.williest.onechampionshipapi.model.Club;
 import com.williest.onechampionshipapi.model.ClubScore;
 import com.williest.onechampionshipapi.model.Scorer;
 import com.williest.onechampionshipapi.repository.crudOperation.PlayerDAO;
@@ -28,7 +29,9 @@ public class ClubScoreMapper implements Function<ResultSet, ClubScore> {
             );
 
             return new ClubScore(
-                    rs.getInt("score"),
+                    (UUID) rs.getObject("goal_id"),
+                    Club.builder().id((UUID) rs.getObject("club_id")).build(),
+                    rs.getInt("total_goals"),
                     List.of(scorer)
             );
         } catch (SQLException e) {

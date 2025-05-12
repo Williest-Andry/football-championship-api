@@ -9,6 +9,7 @@ public abstract class EntityStatistics {
     @JsonIgnore
     private UUID id;
     private int scoredGoals;
+    private Match match;
 
     public EntityStatistics(UUID id, int scoredGoals) {
         this.id = id != null ? id : UUID.randomUUID();

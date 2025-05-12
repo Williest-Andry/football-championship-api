@@ -8,5 +8,5 @@ import lombok.Data;
 public class Scorer {
     private Player player;
     private int minuteOfGoal;
-    private boolean ownGoal;
+    private Boolean ownGoal;
 }
