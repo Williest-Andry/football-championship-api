@@ -14,16 +14,10 @@ import java.util.function.Function;
 
 @Component
 public class PlayerStatisticsMapper implements Function<ResultSet, PlayerStatistics> {
+
     @Override
     public PlayerStatistics apply(ResultSet rs) {
         try{
-            double totalTimeMinute = rs.getDouble("playing_time_minute");
-            double totalTimeSecond = totalTimeMinute * 60;
-            PlayerPlayingTime totalTimePlaying = new PlayerPlayingTime(
-                    totalTimeSecond,
-                    DurationUnit.SECOND
-            );
-
             int totalGoals;
             try{
                 totalGoals = rs.getInt("total_goals");
@@ -36,7 +30,7 @@ public class PlayerStatisticsMapper implements Function<ResultSet, PlayerStatist
             PlayerStatistics playerStatistics = new PlayerStatistics(
                     (UUID) rs.getObject("player_statistic_id"),
                     totalGoals,
-                    totalTimePlaying
+                    null
             );
             playerStatistics.setMatch(match);
 
@@ -44,5 +38,20 @@ public class PlayerStatisticsMapper implements Function<ResultSet, PlayerStatist
         } catch(SQLException e){
             throw new ServerException("ERROR IN PLAYER STATISTICS MAPPER : " + e.getMessage());
         }
+    }
+
+    public PlayerStatistics applyWithPlayingTime(ResultSet rs, int playingTime) {
+        PlayerStatistics playerStatistics = this.apply(rs);
+
+        double totalTimeMinute = playingTime;
+        double totalTimeSecond = totalTimeMinute * 60;
+        PlayerPlayingTime totalTimePlaying = new PlayerPlayingTime(
+                totalTimeSecond,
+                DurationUnit.SECOND
+        );
+
+        playerStatistics.setPlayingTime(totalTimePlaying);
+
+        return playerStatistics;
     }
 }

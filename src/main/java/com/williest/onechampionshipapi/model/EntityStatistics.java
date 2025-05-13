@@ -9,6 +9,7 @@ public abstract class EntityStatistics {
     @JsonIgnore
     private UUID id;
     private int scoredGoals;
+    @JsonIgnore
     private Match match;
 
     public EntityStatistics(UUID id, int scoredGoals) {

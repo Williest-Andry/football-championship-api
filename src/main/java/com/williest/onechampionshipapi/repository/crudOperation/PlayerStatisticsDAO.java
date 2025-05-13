@@ -30,15 +30,16 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
                 " FROM player_statistic " +
                 " INNER JOIN player ON player.player_id = player_statistic.player_id" +
                 " INNER JOIN season ON season.season_id = player_statistic.season_id " +
-                " WHERE player_statistic.player_id = ? AND season.year = ?::varchar " +
+                " WHERE player_statistic.player_id = ? AND season.year = ? " +
                 " GROUP BY player_statistic_id, match_id;";
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, playerId);
-            select.setInt(2, Integer.parseInt(seasonYear));
+            select.setString(2, seasonYear);
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()) {
-                    playerStatistics = this.playerStatisticsMapper.apply(rs);
+                    int playingTime = this.findPlayerPlayingTimeByPlayerIdAndSeasonYear(playerId, seasonYear);
+                    playerStatistics = this.playerStatisticsMapper.applyWithPlayingTime(rs, playingTime);
                 }
             }
         } catch(SQLException e){
@@ -58,15 +59,16 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
                 " INNER JOIN player ON player.player_id = player_statistic.player_id" +
                 " INNER JOIN goal ON goal.player_id = player.player_id " +
                 " INNER JOIN season ON season.season_id = player_statistic.season_id " +
-                " WHERE player_statistic.player_id = ? AND season.year = ?::varchar AND own_goal = false " +
-                "GROUP BY player_statistic.player_statistic_id ;";
+                " WHERE player_statistic.player_id = ? AND season.year = ? AND own_goal = false " +
+                "GROUP BY player_statistic.player_statistic_id, player_statistic.match_id ;";
         try(Connection dbConnection = dataSourceDB.getConnection();
             PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
             select.setObject(1, playerId);
-            select.setInt(2, Integer.parseInt(seasonYear));
+            select.setString(2, seasonYear);
             try(ResultSet rs = select.executeQuery();){
                 if(rs.next()) {
-                    playerStatistics = this.playerStatisticsMapper.apply(rs);
+                    int playingTime = this.findPlayerPlayingTimeByPlayerIdAndSeasonYear(playerId, seasonYear);
+                    playerStatistics = this.playerStatisticsMapper.applyWithPlayingTime(rs,playingTime);
                 } else{
                     return this.findByPlayerNoGoal(playerId, seasonYear);
                 }
@@ -77,6 +79,31 @@ public class PlayerStatisticsDAO implements EntityDAO<PlayerStatistics> {
         }
 
         return playerStatistics;
+    }
+
+    public int findPlayerPlayingTimeByPlayerIdAndSeasonYear(UUID playerId, String seasonYear) {
+        int playingTime = 0;
+
+        sqlRequest = "SELECT SUM(playing_time_minute) AS playing_time_minute FROM player_statistic " +
+                " JOIN player ON player.player_id = player_statistic.player_id " +
+                " JOIN season ON season.season_id = player_statistic.season_id " +
+                " WHERE player_statistic.player_id = ? AND season.year = ?;";
+
+        try(Connection dbConnection = dataSourceDB.getConnection();
+            PreparedStatement select = dbConnection.prepareStatement(sqlRequest);){
+            select.setObject(1, playerId);
+            select.setString(2, seasonYear);
+            try(ResultSet rs = select.executeQuery();){
+                if(rs.next()) {
+                    playingTime = rs.getInt("playing_time_minute");
+                }
+            }
+        } catch(SQLException e){
+            throw new ServerException("ERROR IN FIND PLAYER PLAYING TIME BY PLAYER_ID AND SEASON YEAR : "
+                    + e.getMessage());
+        }
+
+        return playingTime;
     }
 
     public List<PlayerStatistics> findAllByPlayerId(UUID playerId) {
