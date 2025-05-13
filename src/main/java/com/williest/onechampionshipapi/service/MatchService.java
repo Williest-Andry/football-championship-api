@@ -135,11 +135,22 @@ public class MatchService implements EntityService<Match> {
         UUID clubAwayId = clubAway.getClubScore().getClub().getId();
 
         scorers.forEach(scorer -> {
+            if(scorer.getMinuteOfGoal() < 1 || scorer.getMinuteOfGoal() > 90){
+                throw new ClientException("The minute of goal must be an integer between 1 to 90");
+            }
+
             UUID scorerClubId = scorer.getPlayer().getClub().getId();
             this.clubService.getById(scorerClubId.toString());
+            if(!scorerClubId.equals(clubHomeId) && !scorerClubId.equals(clubAwayId)){
+                throw new ClientException("The club with identifier : " + scorerClubId + " doesn't play in this match");
+            }
 
             UUID scorerId = scorer.getPlayer().getId();
-            scorer.setPlayer(this.playerService.getById(scorerId.toString()));
+            Player scorerPlayer = this.playerService.getById(scorerId.toString());
+            if(!scorerPlayer.getClub().getId().equals(clubHomeId) && !scorerPlayer.getClub().getId().equals(clubAwayId)){
+                throw new ClientException("The player with identifier : " + scorerId + " doesn't play in the provided club");
+            }
+            scorer.setPlayer(scorerPlayer);
 
             clubHome.getClubScore().setId(UUID.randomUUID());
             clubAway.getClubScore().setId(UUID.randomUUID());
